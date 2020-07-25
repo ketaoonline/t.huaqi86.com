@@ -1,0 +1,129 @@
+<link rel="stylesheet" href="{$pc_path}/style_5.css"/>
+<link rel="stylesheet" href="__STATIC__/plugin/swiper/swiper.min.css">
+<script src="__STATIC__/plugin/swiper/swiper.min.js"></script>
+
+<div class="floor-five floor-item floor-{$rand_num}">
+
+	<div class="swiper-container" data-block-type="adv" data-block-name="carousel" data-type="multi_graph">
+  		<div class="swiper-wrapper">
+  			{notempty name="$data['adv']['carousel']"}
+				{foreach name="$data['adv']['carousel']" item="vo" key="k"}
+			    <div class="swiper-slide">
+			    	{notempty name="$vo.link"}
+						{if is_url($vo.link)}
+						<a href="{$vo.link}" target="_blank">
+						{else/}
+						<a href="{:__URL('SHOP_MAIN'.$vo['link'])}" target="_blank">
+						{/if}
+					{else/}
+					<a href="javascript:;" target="_blank">
+					{/notempty}
+						<img alt="{$vo.title}" src="{:__IMG($vo.img_src)}">
+					</a>
+			    </div>
+			    {/foreach}
+			{else/}
+			<div class="swiper-slide"></div>
+			{/notempty}
+  		</div>
+
+  		{notempty name="$data['adv']['carousel']"}
+		<div class="carousel-indicators-wrapper">
+			<ul class="clearfix">
+				{foreach name="$data['adv']['carousel']" item="vo" key="k"}
+				<li data-index="{$k}" {eq name="$k" value="0"}class="current"{/eq}>{$vo.title}</li>
+				{/foreach}
+			</ul>
+		</div>
+		{/notempty}
+
+  		<div class="classify-wrapper">
+			<div class="title">
+				<h3 class="current" data-block-type="text" data-block-name="block_title">
+					{notempty name="$data['text']['block_title']['value']"}
+						<a href="">{$data['text']['block_title']['value']}</a>
+					{else/}
+						<a href="javascript:;">楼层</a>
+					{/notempty}
+				</h3>
+				<p class="short_title" data-block-type="text" data-block-name="block_short_title">{notempty name="$data['text']['block_short_title']['value']"}{$data['text']['block_short_title']['value']}{else/}GOODS FLOOR{/notempty}</p>
+			</div>
+			<ul class="clearfix" data-block-type="product_category" data-block-name="categoryList">
+				{notempty name="$data['product_category']['categoryList']"}
+                	{foreach name="$data['product_category']['categoryList']" item="vo"}
+						<li class="ns-bg-color-hover"><a href="{:__URL('SHOP_MAIN/goods/lists?category_id='.$vo['category_id'])}" target="_blank">{$vo['category_name']}</a></li>
+					{/foreach}
+				{else/}
+					<li class="ns-bg-color-hover"><a href="javascript:;">分类名称</a></li>
+				{/notempty}
+			</ul>
+		</div>
+	</div>
+
+	<div class="goods-container" data-block-type="product" data-block-name="goodsList">
+		<ul class="clearfix list">
+		{notempty name="$data['product']['goodsList']"}
+        	{foreach name="$data['product']['goodsList']" item="product"}
+        		<li class="goods-item">
+					<a href="{:__URL('SHOP_MAIN/goods/detail?goods_id='.$product['goods_id'])}" class="goods-img" target="_blank">
+						{if condition="$product['pic_cover_small'] != '' "}
+	                    	<img src="{:__img($product['pic_cover_small'])}">
+	                    {else/}
+	                    	<img src="WEB_IMG/discount_product_default.png">
+	                    {/if}
+					</a>
+					<p class="goods-name">
+						<a href="{:__URL('SHOP_MAIN/goods/detail?goods_id='.$product['goods_id'])}" target="_blank">{$product.goods_name}</a>
+					</p>
+					<p class="goods-price ns-text-color">￥<span>{$product.promotion_price}</span></p>
+				</li>
+			{/foreach}
+		{else/}
+			{for start="0" end="4"}
+				<li class="goods-item">
+					<a href="javascript:;" class="goods-img"><img src="" alt=""></a>
+					<p class="goods-name skeleton">
+					</p>
+					<p class="goods-price skeleton"></p>
+				</li>
+			{/for}
+		{/notempty}
+		</ul>
+	</div>
+</div>
+
+<script>
+	var floor5Swiper{$rand_num} = new Swiper('.floor-{$rand_num} .swiper-container', {
+		speed : 600,
+		autoplay : {
+ 			delay: 2500,
+ 			disableOnInteraction : false
+		},
+	    loop : true,
+	    effect : 'fade',
+	    pagination: {
+   		 	el: '.floor-{$rand_num} .carousel-indicators-wrapper',
+    		type: 'custom',
+    		renderCustom: function (swiper, current, total) {
+    			$(swiper.$el).find('.carousel-indicators-wrapper li').removeClass('current');
+    			$(swiper.$el).find('.carousel-indicators-wrapper li:eq('+ (current - 1) +')').addClass('current');
+    		}
+		}
+	})
+
+	floor5Swiper{$rand_num}.el.onmouseover = function(){
+	  floor5Swiper{$rand_num}.autoplay.stop();
+	}
+
+	floor5Swiper{$rand_num}.el.onmouseout = function(){
+	  floor5Swiper{$rand_num}.autoplay.start();
+	}
+
+	$('.floor-{$rand_num} .carousel-indicators-wrapper li').mouseover(function(event) {
+		var index = $(this).index() + 1;
+		$('.floor-{$rand_num} .carousel-indicators-wrapper li').removeClass('current');
+		$(this).addClass('current')
+		floor5Swiper{$rand_num}.slideTo(index);
+	});
+</script>
+<input type="hidden" name="floor_name" value="{$name}">

@@ -1,0 +1,81 @@
+{extend name="$base" /}
+
+{block name="resources"}
+<link rel="stylesheet" href="WAP_ADDON_CSS/recharge.css">
+{/block}
+
+{block name="main"}
+{php}
+// 充值有礼活动列表
+$recharge_list = api('NsRecharge.Recharge.rechargeList');
+$recharge_list = $recharge_list['data'];
+// 充值设置
+$recharge_config = api('NsRecharge.Recharge.rechargeConfig');
+$recharge_config = $recharge_config['data'];
+// 获取交易号
+$pay_no = api('System.Member.recharge');
+$pay_no = $pay_no['data'];
+{/php}
+<div class="recharge-amount">
+	{if in_array('fixed_amount', $recharge_config['rechargeMode'])}
+	<div class="select-amount">
+		<h5 class="_title">请选择充值金额</h5>
+		<ul>
+			{notempty name="$recharge_config['fixedAmount']"}
+				{foreach name="$recharge_config['fixedAmount']" item="vo"}
+					<li data-value="{$vo}">{$vo}</li>
+				{/foreach}
+			{/notempty}
+		</ul>
+	</div>
+	{/if}
+	{if in_array('custom_amount', $recharge_config['rechargeMode'])}
+	<div class="recharge-form">
+		<label for="">
+			<span>充值金额</span>
+			{notempty name="$recharge_config['customAmount']"}
+			<input type="number" placeholder="请输入充值金额，最低充值{$recharge_config['customAmount']}元" data-min-recharge="{$recharge_config['customAmount']}" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')">
+			{else/}
+			<input type="number" placeholder="请输入充值金额" data-min-recharge="0" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')">
+			{/notempty}
+		</label>
+	</div>
+	{/if}
+</div>
+{notempty name="$recharge_list"}
+	{foreach name="$recharge_list" item="vo"}
+	<div class="activity-list">
+		<div class="activity-item">
+			<p class="activity-name">{$vo.activity_name}</p>
+			{notempty name="$vo['data']"}
+			<ul class="give-cont">
+				{foreach name="$vo['data']" item="co"}
+				<li>充值满{$co.condition}元
+					{foreach name="$co['giveCont']" item="go"}
+						{switch name="$go['type']"}
+							{case value="point"}，送{$go.value}积分{/case}
+							{case value="balance"}，送{$go.value}余额{/case}
+							{case value="pointratio"}，送充值金额{$go.value}%的积分{/case}
+							{case value="balanceratio"}，送充值金额{$go.value}%的余额{/case}
+							{case value="coupon"}，送优惠券{/case}
+						{/switch}
+					{/foreach}
+				</li>
+				{/foreach}
+			</ul>
+			{/notempty}
+			<div class="time-limit">
+				{$vo.start_time|date="Y.m.d H:i:s",###} 至 {$vo.end_time|date="Y.m.d H:i:s",###}
+			</div>
+		</div>
+	</div>
+	{/foreach}
+{/notempty}
+<button class="ns-bg-color recharge-btn" type="button" onclick="recharge()">立即充值</button>
+<div></div>
+<input type="hidden" id="pay_no" value="{$pay_no}">	
+{/block}
+
+{block name="script"}
+<script src="WAP_ADDON_JS/recharge.js"></script>
+{/block}

@@ -1,0 +1,164 @@
+{extend name="$base" /}
+{block name="resources"}
+<style>
+.ns-main {margin-top: 0px; }
+</style>
+{/block}
+
+{block name="main"}
+<table class="mytable">
+	<tbody>
+		<tr>
+			<th width="20%" style="text-align: left;">
+				<a href="{:__URL('__URL__/NsRecharge/ADMIN_MODULE/config/addrecharge')}" class="btn-common btn-small" style="margin:0 5px 0 0 !important;">添加充值有礼</a>
+				<button class="btn-common-delete btn-small" onclick="batchDelete()" style="margin:0 5px 0 0 !important;">批量删除</button>
+			</th>
+			<th class="default-condition">
+				<input type="text" id="search_text" placeholder="输入活动名称" class="input-common middle" autocomplete="off">
+				<input type="button" onclick="LoadingInfo(1)" value="搜索" class="btn-common">
+			</th>
+		</tr>
+	</tbody>
+</table>
+<table class="table-class">
+	<colgroup>
+		<col style="width: 2%;">
+		<col style="width: 24%;">
+		<col style="width: 38%;">
+		<col style="width: 20%;">
+		<col style="width: 16%;">
+	</colgroup>
+	<thead>
+		<tr align="center">
+			<th><i class="checkbox-common"><input type="checkbox" ></i></th>
+			<th align="left">活动名称</th>
+			<th>活动时间</th>
+			<th>活动状态</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+function LoadingInfo(page_index) {
+	var search_text = $("#search_text").val();
+	var status = 0;
+	$.ajax({
+		type : "post",
+		url : "{:__URL('__URL__/NsRecharge/ADMIN_MODULE/config/index')}",
+		data : {
+			"page_index" : page_index, 
+			"page_size" : $("#showNumber").val(), 
+			"search_text" : search_text,
+			"status" : status
+		},
+		success : function(data) {
+			if (data["data"].length > 0) {
+				$(".table-class tbody").empty();
+				for (var i = 0; i < data["data"].length; i++) {
+					var html = '';
+					switch(parseInt(data['data'][i]['status'])){
+						case 0:
+							var status_name = '未开始';
+							break;
+						case 1:
+							var status_name = '进行中';
+							break;
+						case -1:
+							var status_name = '已结束';
+							break;
+					}
+					html += '<tr align="center">';
+					html += '<td><div class="cell">';
+					if(data['data'][i]['status'] == 1){
+						html += '<i class="checkbox-common disabled"><input name="sub_use" type="checkbox" value="'+data["data"][i]["id"]+'" disabled="disabled"></i>';
+					}else{
+						html += '<i class="checkbox-common"><input name="sub_no_use" type="checkbox"  value="'+data["data"][i]["id"]+'"></i>';
+					}
+					html += '</div></td>';
+					html += '<td align="left">' + data["data"][i]["activity_name"] + '</td>';;
+					
+					html += '<td>' + timeStampTurnTime(data["data"][i]["start_time"]) + ' ~ ' + timeStampTurnTime(data["data"][i]["end_time"]) + '</td>';
+					html += '<td>'+ status_name +'</td>';
+					html += '<td>';
+					if(data['data'][i]['status'] == 0){
+						html += '<a href="'+__URL('__URL__/NsRecharge/ADMIN_MODULE/config/editRecharge?id=' + data["data"][i]["id"])+'">编辑</a>&nbsp;';
+						html += '<a href="javascript:void(0);"onclick="delActivity('+data["data"][i]["id"]+')">删除</a>&nbsp;'; 
+					}else if(data['data'][i]['status'] == 1){
+						html += '<a href="'+__URL('__URL__/NsRecharge/ADMIN_MODULE/config/editRecharge?id=' + data["data"][i]["id"])+'">编辑</a>&nbsp;';
+						html += '<a href="javascript:void(0);"onclick="closeActivity('+data["data"][i]["id"]+')">结束活动</a>&nbsp;'; 
+					}else if(data['data'][i]['status'] == -1){
+						html += '<a href="javascript:void(0);"onclick="delActivity('+data["data"][i]["id"]+')">删除</a>&nbsp;'; 
+					}
+					html += '</td>';
+					html += '</tr>';
+					$(".table-class tbody").append(html);
+				}
+			} else {
+				var html = '<tr align="center"><td colspan="5">暂无符合条件的数据记录</td></tr>';
+				$(".table-class tbody").html(html);
+			}
+			initPageData(data["page_count"],data['data'].length,data['total_count']);
+			$("#pageNumber").html(pagenumShow(jumpNumber,$("#page_count").val(),{$pageshow}));
+		}
+	});
+}
+
+// 关闭活动
+function closeActivity(id){
+	$.ajax({
+		type:"post",
+		url : "{:__URL('__URL__/NsRecharge/ADMIN_MODULE/config/closeRecharge')}",
+		data : { "id" : id },
+		success : function(data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],"{:__URL('__URL__/NsRecharge/ADMIN_MODULE/config/index')}");
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	})
+}
+
+// 删除活动
+function delActivity(id){
+	$.ajax({
+		type:"post",
+		url : "{:__URL('__URL__/NsRecharge/ADMIN_MODULE/config/deleteRecharge')}",
+		data : { "id" : id },
+		success : function(data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],"{:__URL('__URL__/NsRecharge/ADMIN_MODULE/config/index')}");
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	})
+} 
+
+function batchDelete() {
+	var id = [];
+	$(".table-class tbody input[type='checkbox']:checked").not(":disabled").each(function() {
+		if (!isNaN($(this).val())) {
+			id.push($(this).val());
+		}
+	});
+	if(id.length ==0){
+		$( "#dialog" ).dialog({
+			buttons: {
+				"确定,#0059d6,#fff": function() {
+					$(this).dialog('close');
+				}
+			},
+			contentText:"请选择需要操作的记录",
+			title:"消息提醒",
+		});
+		return false;
+	}
+	delActivity(id.toString());
+}
+</script>
+{/block}

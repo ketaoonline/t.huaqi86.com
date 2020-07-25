@@ -1,0 +1,40 @@
+{extend name="$base" /}
+{block name="resources"}
+<style>
+.set-style h4 {margin-bottom:10px;}
+</style>
+{/block}
+{block name="main"}
+<div class="set-style">
+	<h4><span></span>物流公司编码</h4>
+	<div class="mod-table">
+		<div class="mod-table-head">
+			<div class="con style0list">
+				<table class="table-class">
+					<colgroup>
+						<col style="width: 30%;">
+						<col style="width: 30%;">
+						<col style="width: 30%;">
+					</colgroup>
+					<thead>
+						<tr>
+							<th>物流公司名称</th>
+							<th>快递100编码</th>
+							<th>快递鸟编码</th>
+						</tr>
+					</thead>
+					<tbody id="tbody">
+						{foreach name="express_company_code" item="vo"}
+						<tr align="center" data-show="1">
+							<td>{$vo['name']}</td>
+							<td>{$vo['aliases']['kd100']}</td>
+							<td>{$vo['aliases']['kdniao']}</td>
+						</tr>
+						{/foreach}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}

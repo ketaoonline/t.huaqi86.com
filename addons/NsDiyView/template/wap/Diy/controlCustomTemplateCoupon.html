@@ -1,0 +1,147 @@
+<!-- 优惠券 -->
+<style>
+.coupon .cou-top{
+	font-size: 15px;
+    position: relative;
+    top: -1px;
+    left: 11px;
+    color: #ee3604;
+    display: inline-block;
+    width: 25px;
+    height: 28px;
+    background: #fee882;
+    text-align: center;
+    line-height: 17px;
+}
+.coupon .cou-top:after{
+    content: "";
+    position: absolute;
+    border: 17px solid transparent;
+    border-bottom-color: #f1420b;
+    left: -4px;
+    border-width: 17px 17px 9px 17px;
+    bottom: 0px;
+}
+.coupon .receive i{
+	font-size:14px;
+	margin-left:3px
+}
+.coupon .receive i:before{
+	content: "\f105";
+}
+.coupon .receive{
+	display: inline-block;
+	white-space: initial;
+	margin-left: 14px;
+	line-height: 1.0;
+	vertical-align: middle;
+	position: absolute;
+	top: 42px;
+	right: 5px;
+	background: #f9d22c;
+	border-radius: 15px;
+	padding: 1px 6px 1px 8px;
+	color:#923523; 
+	font-size:12px; 
+}
+.coupon .cou-tips{
+	font-size: 12px;
+    color: #fff;
+    position: absolute;
+    top: 8px;
+    right: 6px;
+}  
+.zhegai{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background: rgba(255,255,255,0.7);
+}
+.coupon .receive.lingwan{
+	padding: 2px 4px 1px 5px;
+}
+</style>
+{php}
+	$coupon_list = api("System.Member.canReceiveCouponQuery",['uid'=>$uid]);
+	$coupon_list = $coupon_list['data'];
+{/php}
+
+{notempty name="$coupon_list"}
+
+
+	{if condition="$custom_template_v.control_data.coupons.style==1"}
+	<div class="coupon-all">
+	{volist name="coupon_list" id="vo" }
+	{if condition="$vo['money'] gt 0 && $vo['money'] elt 10"}
+		<div class="coupon" onclick="couponReceive(this,{$vo.coupon_type_id})" data-max-fetch="{$vo.max_fetch}" data-received-num="{if !empty($uid)}{$vo.received_num}{else/}0{/if}">
+	{elseif condition="$vo['money'] gt 10 && $vo['money'] elt 100"}
+		<div class="coupon" onclick="couponReceive(this,{$vo.coupon_type_id})" data-max-fetch="{$vo.max_fetch}" data-received-num="{if !empty($uid)}{$vo.received_num}{else/}0{/if}">
+	{elseif condition="$vo['money'] gt 100"}
+		<div class="coupon" onclick="couponReceive(this,{$vo.coupon_type_id})" data-max-fetch="{$vo.max_fetch}" data-received-num="{if !empty($uid)}{$vo.received_num}{else/}0{/if}">
+	{/if}
+			<i class="cou-top">劵</i>
+			<p><span>￥</span>{$vo.money}</p>
+			<span class="cou-tips">满{$vo.at_least}可用</span>
+			
+			{if condition="$vo.max_fetch <= $vo.received_num && $vo.max_fetch != 0"}			
+				<span class="receive lingwan">已领取</span>
+				<div class="zhegai"></div>
+			{else/}			
+				<span class="receive">领取<i class="fa fa-angle-right ns-text-color-gray"></i></span>
+				<span class="receive lingwan" style="display:none">已领取</span>
+				<div class="zhegai" style="display:none"></div>
+			{/if}
+		</div>
+	{/volist}
+	</div>
+	
+	
+	
+	{elseif condition="$custom_template_v.control_data.coupons.style==2"}
+	<div class="coupon-all2">
+		{volist name="coupon_list" id="vo"}
+		<div class="coupons-style2" onclick="couponReceive(this,{$vo.coupon_type_id})" data-max-fetch="{$vo.max_fetch}" data-received-num="{if !empty($uid)}{$vo.received_num}{else/}0{/if}">
+			<span class="money-number">￥{$vo.money}</span>
+			<p class="explanation">满{$vo.at_least}可用</p>
+			<span class="get">领取</span>
+		</div>
+		{/volist}
+	</div>
+	{/if}
+
+	<script type="text/javascript">
+		var is_have = true;
+
+		function couponReceive(event, coupon_type_id) {
+			var info = new Array();
+			info['maxFetch'] = $(event).attr("data-max-fetch");
+			info['receivedNum'] = $(event).attr("data-received-num");
+			
+			is_have = false;
+			if (is_have) return;
+			api("System.Member.getCoupon", {'coupon_type_id': coupon_type_id, "scenario_type": 2}, function (res) {
+				if (res.code >= 0) {
+					toast('领取成功');
+					is_have = true;
+					var received_num = parseInt(info['receivedNum']) + 1; // 该用户已领取数
+					$(event).attr("data-received-num", received_num);
+					
+					if (info['maxFetch'] > 0 && received_num >= info['maxFetch']) {
+						$(event).find(".get").text("已领取");
+						$(event).addClass("received");
+						$(event).find(".receive.get").hide();
+						$(event).find(".receive.lingwan").show();
+						$(event).find(".zhegai").show();						
+					}
+				} else if (res.code == -9999) {
+					toast(res.message, __URL(APPMAIN + "/login/index"));
+				} else {
+					toast(res.message);
+					is_have = true;
+				}
+			});
+		}
+	</script>
+{/notempty}

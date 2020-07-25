@@ -1,0 +1,46 @@
+<style>
+.url-pop-up .layui-form{padding: 10px;}
+.url-pop-up .layui-form .layui-input {margin-bottom: 0;}
+</style>
+
+<div class="layui-form">
+ 	<div class="layui-form-item">
+        <label class="layui-form-label sm">跳转链接</label>
+        <div class="layui-input-block">
+            <input type="text" name="url" {notempty name="$data"}value="{$data['link']}"{/notempty} required  lay-verify="url" placeholder="请输入跳转链接" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="margin-bottom: 0;">
+        <label class="layui-form-label sm"></label>
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="save">确定</button>
+        </div>
+    </div>
+</div>
+
+<script>
+layui.use('form', function(){
+	var form = layui.form;
+	
+	form.verify({
+        url: function(value, item){ //value：表单的值、item：表单的DOM对象
+            if($.trim(value).length == 0){
+                return '请输入跳转链接';
+            } else if(!/^(http|https)\S+$/.test(value)) {
+                return '链接地址格式错误';
+            }
+        }
+    });
+
+	form.on('submit(save)', function(data){
+		var obj = {
+		    link : data.field.url
+		};
+		
+		block.setData(obj);
+		layer.close(block.layer_open_index);
+		return false;
+	});
+})
+</script>

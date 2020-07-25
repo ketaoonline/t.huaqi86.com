@@ -1,0 +1,43 @@
+<!-- 文本导航 -->
+{if condition = "$custom_template_v.control_data.text_navigation.arrangement == 1"}
+<nav class="control-text-navigation" 
+style="background:url({:__IMG($custom_template_v.control_data.text_navigation.bg_img)}) 50% / 100% no-repeat {$custom_template_v.control_data.text_navigation.bg_color};
+font-size:{$custom_template_v['control_data']['text_navigation']['font_size']}px;padding:{$custom_template_v['control_data']['text_navigation']['padding']}px 0;
+text-align:{if condition="$custom_template_v.control_data.text_navigation.text_align == 1"}left{elseif condition="$custom_template_v.control_data.text_navigation.text_align == 2"}center{elseif condition="$custom_template_v.control_data.text_navigation.text_align == 3"}right{/if};"
+>
+	<span>
+		{notempty name="$custom_template_v['control_data']['text_navigation']['items'][0]['href']['template_url']"}
+			{if is_url($custom_template_v['control_data']['text_navigation']['items'][0]['href']['template_url'])}
+				<a href="{$custom_template_v['control_data']['text_navigation']['items'][0]['href']['template_url']}" style="color:{$custom_template_v['control_data']['text_navigation']['text_color']};">
+			{else/}
+				<a href="{:__URL('APP_MAIN'.$custom_template_v['control_data']['text_navigation']['items'][0]['href']['template_url'])}" style="color:{$custom_template_v['control_data']['text_navigation']['text_color']};">
+			{/if}
+		{else/}
+			<a href="javascript:;" style="color:{$custom_template_v['control_data']['text_navigation']['text_color']};">
+		{/notempty}
+		{$custom_template_v['control_data']['text_navigation']['items'][0]['text']}</a>
+	</span>
+	<i class="fa fa-angle-right"></i>
+</nav>
+{else/}
+<nav class="control-text-navigation" 
+style="background:url({:__IMG($custom_template_v.control_data.text_navigation.bg_img)}) 50% / 100% no-repeat {$custom_template_v.control_data.text_navigation.bg_color};
+font-size:{$custom_template_v['control_data']['text_navigation']['font_size']}px;padding:{$custom_template_v['control_data']['text_navigation']['padding']}px 0;
+text-align:{if condition="$custom_template_v.control_data.text_navigation.text_align == 1"}left{elseif condition="$custom_template_v.control_data.text_navigation.text_align == 2"}center{elseif condition="$custom_template_v.control_data.text_navigation.text_align == 3"}right{/if};"
+>
+	{foreach name="$custom_template_v['control_data']['text_navigation']['items']" item="vo"}
+	<span>
+		{notempty name="$vo['href']['template_url']"}
+			{if is_url($vo['href']['template_url'])}
+				<a href="{$vo['href']['template_url']}" style="color:{$custom_template_v['control_data']['text_navigation']['text_color']};">
+			{else/}
+				<a href="{:__URL('APP_MAIN'.$vo['href']['template_url'])}" style="color:{$custom_template_v['control_data']['text_navigation']['text_color']};">
+			{/if}
+		{else/}
+		<a href="javascript:;" style="color:{$custom_template_v['control_data']['text_navigation']['text_color']};">
+		{/notempty}
+		{$vo.text}</a>
+	</span>
+	{/foreach}
+</nav>
+{/if}

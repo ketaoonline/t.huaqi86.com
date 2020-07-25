@@ -1,0 +1,40 @@
+<!-- 图文导航 -->
+<style>
+nav{padding-bottom:10px}
+.control-nav-img{$k},.control-nav-img ul{overflow: hidden;}
+.control-nav-img{$k} ul li {float: left;width: 25%;text-align: center;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;font-size: 12px;color: rgb(102, 102, 102);max-height: 80px;margin-bottom: 5px;}
+.control-nav-img{$k} ul li a{display: block;}
+.control-nav-img{$k} ul li.double-columns {width: 20%;}
+.control-nav-img{$k} ul li div {height: 53px;line-height: 53px;margin-bottom:4px;margin-top:8px;}
+.control-nav-img{$k} ul li div img{max-width: 100%;max-height: 100%;vertical-align: middle;}
+</style>
+<nav class="control-nav-img{$k}" style="background:{$custom_template_v.control_data.nav_hybrid.bg_color};">
+	<ul>
+		{foreach $custom_template_v.control_data.nav_hybrid.items as $k=>$v}
+		<li 
+		{if condition="$custom_template_v.control_data.nav_hybrid.type == 5 || $custom_template_v.control_data.nav_hybrid.type == 10"}class="double-columns"{/if}
+			{if condition="$custom_template_v.control_data.nav_hybrid.type == 4 || $custom_template_v.control_data.nav_hybrid.type == 5"} style="margin-bottom:0;"{/if}
+		>
+<!-- 			<a {notempty name="$v['href']['template_url']"}href="{:__URL('APP_MAIN'.$v['href']['template_url'])}"{else/}href="javascript:;"{/notempty}> -->
+				
+				{notempty name="$v['href']['template_url']"}
+					{if is_url($v['href']['template_url'])}
+					<a href="{$v['href']['template_url']}">
+					{else/}
+					<a href="{:__URL('APP_MAIN'.$v['href']['template_url'])}">
+					{/if}
+				{else/}
+					<a href="javascript:;">
+				{/notempty}
+				
+				{if condition="$v['src']"}
+				<div>
+					<img src="{:__IMG($v['src'])}"/>
+				</div>
+				{/if}
+				<span style="color:{$custom_template_v.control_data.nav_hybrid.text_color};">{$v.text}</span>
+			</a>
+		</li>
+		{/foreach}
+	</ul>
+</nav>

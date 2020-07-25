@@ -1,0 +1,216 @@
+	{extend name="$base" /}
+
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="WAP_CSS/distribution_member_level.css">
+{/block}
+
+{block name="main"}
+{php}
+//申请相关信息
+$apply_info = api("System.Distribution.checkApplyPromoter")['data'];
+
+//所有等级
+$promoter_level = $apply_info['promoter_level'];
+$level_count = count($promoter_level);
+//推广员信息
+$promoter_info = $apply_info['promoter_info'];
+//当前等级和下一等级
+$current_level_info = [];
+$next_level_info = [];
+$key_type = 0;
+foreach($promoter_level as $key => $val){
+
+	if($val['level_id'] == $promoter_info['promoter_level']){
+		$key_type = $key;
+		$current_level_info = $val;
+	}
+	
+	if($key == $level_count-1 && $val['level_id'] == $promoter_info['promoter_level']){
+	 	$next_level_info = []; 
+	}else{
+		if($key < $level_count){	
+			if($key == ($key_type + 1)){	
+				$next_level_info = $val;	
+			}
+		}	
+	}	
+}
+if($next_level_info != ""){
+	if($current_level_info['level_money'] == $next_level_info['level_money']){
+		$next_level_info = [];
+	}
+}
+
+$member_detail = api('System.Member.memberInfo');
+$member_info = $member_detail['data'];
+
+
+{/php}
+
+<div class="member-top">
+	<div class="user-info">
+		<div class="user-info-wrap">
+			<div class="user-img">
+				{eq name="$member_info.user_info.user_headimg" value=""}
+				<img src="{:__IMG($default_headimg)}" />
+				{else/}
+				<img src="{:__IMG($member_info.user_info.user_headimg)}" />
+				{/eq}
+			</div>
+			<div class="user-name">
+				<div>
+					{$member_info.user_info.nick_name}
+				</div>
+				<div style="font-size:13px">
+					当前消费：{$apply_info['user_consume']}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bg-img">
+		<img src="WAP_IMG/distribution/icon-img.png" style="width: 131px">
+		<span class="level-name">{$current_level_info['level_name']}</span>
+	</div>
+	<!-- 有下一等级才会显示 -->
+	{if condition="!empty($next_level_info)"}
+	{php}
+	$upgrade_need_money = $next_level_info['level_money'] - $apply_info['user_consume'];
+	if($upgrade_need_money < 0) $upgrade_need_money = 0;
+	$percent = ($apply_info['user_consume'] - $current_level_info['level_money']) / ($next_level_info['level_money'] -
+	$current_level_info['level_money']) * 100;
+	{/php}
+	<div class="progress">
+		<div class="progress-info">
+			<span>{$current_level_info['level_name']}</span>
+			<span class="level-right">{$next_level_info['level_name']}</span>
+		</div>
+		<div class="progress-wrap">
+			<div class="progress-bar" style="width: {$percent}%;"></div>
+		</div>
+		<div class="progress-other">
+			<span>您还需投资{$upgrade_need_money}元，升级到{$next_level_info['level_name']}</span>
+			<span class="money">{$next_level_info['level_money']}元</span>
+		</div>
+	</div>
+	{/if}
+	{if condition="empty($next_level_info)"}
+	<div class="member-old-level">
+		您当前已经是最高等级
+	</div>
+	{/if}
+	<div class="triangle">
+
+	</div>
+</div>
+<div class="member-bottom">
+	<div class="member-item">
+		<div class="item-top">
+			{$current_level_info.level_name}权益
+		</div>
+		<div class="item-content">
+			<div class="rate-wrap">
+				<div class="rate">
+					{$current_level_info.level_0}%
+				</div>
+				<div class="rate-name">
+					本店佣金比例
+				</div>
+			</div>
+			<div class="rate-wrap">
+				<div class="rate">
+					{$current_level_info.level_1}%
+				</div>
+				<div class="rate-name">
+					上级佣金比例
+				</div>
+			</div>
+			<div class="rate-wrap">
+				<div class="rate">
+					{$current_level_info.level_2}%
+				</div>
+				<div class="rate-name">
+					上上级佣金比例
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{if condition="!empty($next_level_info)"}
+	<div class="member-item">
+		<div class="item-top">
+			{$next_level_info.level_name}权益
+		</div>
+		<div class="item-content">
+			<div class="rate-wrap">
+				<div class="rate">
+					{$next_level_info.level_0}%
+				</div>
+				<div class="rate-name">
+					本店佣金比例
+				</div>
+			</div>
+			<div class="rate-wrap">
+				<div class="rate">
+					{$next_level_info.level_1}%
+				</div>
+				<div class="rate-name">
+					上级佣金比例
+				</div>
+			</div>
+			<div class="rate-wrap">
+				<div class="rate">
+					{$next_level_info.level_2}%
+				</div>
+				<div class="rate-name">
+					上上级佣金比例
+				</div>
+			</div>
+		</div>
+	</div>
+	{/if}
+</div>
+<div class="member-level-footer">
+	<div class="member-level-footer-box">
+		<div class="item">
+			<div class="level-icon">
+				<img src="WAP_IMG/distribution/level-item-1.png">
+			</div>
+			<div class="item-content">
+				<div class="title">
+					无门槛加入
+				</div>
+				<div class="content">
+					零成本，不囤货，轻松获利
+				</div>
+			</div>
+		</div>
+		<div class="item">
+			<div class="level-icon">
+				<img src="WAP_IMG/distribution/level-item-3.png">
+			</div>
+			<div class="item-content">
+				<div class="title">
+					多维度推广
+				</div>
+				<div class="content">
+					店铺，商品二维码任选
+				</div>
+			</div>
+		</div>
+		<div class="item">
+			<div class="level-icon">
+				<img src="WAP_IMG/distribution/level-item-2.png">
+			</div>
+			<div class="item-content">
+				<div class="title">
+					新增团队玩法
+				</div>
+				<div class="content">
+					支持线上组队，奖励更多
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{/block}

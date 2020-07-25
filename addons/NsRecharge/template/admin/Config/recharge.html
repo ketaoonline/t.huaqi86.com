@@ -1,0 +1,83 @@
+{extend name="$base" /}
+{block name="resources"}
+<style>
+.inline {display: inline-block;margin-bottom: 0;vertical-align: middle;height: 30px;line-height: 30px;}
+.float-left{float: left;}
+.fixed-amount {background: #f9f9f9;border:1px solid #eee;width: 100%;border-radius: 5px;display: flex;margin-top: 10px;padding: 30px 15px;}
+.min-recharge {display: inline-block;height: 30px;line-height: 30px;margin-left: 20px;}
+.min-recharge > span {vertical-align: middle;margin-right: 10px;}
+.fixed-amount > * {margin-right: 10px!important}
+.amount-container .amount-btn {display:inline-block;height: 30px;line-height: 30px;box-sizing: border-box;padding:0 10px;border:1px solid #eee;background: #fff;font-size: 12px;cursor: pointer;transition: all .3s;margin-right: 10px; }
+.amount-container .amount-btn:last-child{margin-right: 0}
+.amount-container .amount-btn:hover{border-color: #00A0DE;color: #00A0DE}
+.amount-container .amount-btn .del {font-style: normal;margin-left: 15px;font-weight: bold;display: inline-block;height: 28px;line-height: 28px;float: right;color: #666}
+</style>
+{/block}
+
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>充值金额：</dt>
+		<dd>
+			<label class="inline">
+				{notempty name="$info['rechargeMode']"}
+				<i class="checkbox-common {if in_array('fixed_amount', $info['rechargeMode'])}selected{/if}">
+					<input type="checkbox" value="fixed_amount" name="rechargemode" {if in_array('fixed_amount', $info['rechargeMode'])}checked{/if}>
+				</i>
+				{else/}
+				<i class="checkbox-common">
+					<input type="checkbox" value="fixed_amount" name="rechargemode">
+				</i>
+				{/notempty}
+				<span>固定充值金额</span>
+			</label>
+			<div class="fixed-amount">
+				<div class="amount-container">
+					{notempty name="$info['fixedAmount']"}
+						{foreach name="$info['fixedAmount']" item="vo"}
+							<span class="amount-btn" data-value="{$vo}"><span>{$vo}元</span><i class="del">x</i></span>
+						{/foreach}
+					{/notempty}
+				</div>
+				<input type="number" name="value" class="input-common harf" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')" placeholder="请输入充值金额">
+				<button class="btn-common-white btn-small add-recharge-amount">添加充值金额</button>
+			</div>
+		</dd>
+	</dl>
+	<dl>
+		<dt></dt>
+		<dd>
+			<label class="inline float-left">
+				{notempty name="$info['rechargeMode']"}
+				<i class="checkbox-common {if in_array('custom_amount', $info['rechargeMode'])}selected{/if}">
+					<input type="checkbox" value="custom_amount" name="rechargemode" {if in_array('custom_amount', $info['rechargeMode'])}checked{/if}>
+				</i>
+				{else/}
+				<i class="checkbox-common">
+					<input type="checkbox" value="custom_amount" name="rechargemode">
+				</i>
+				{/notempty}
+				<span>自定义充值金额</span>
+			</label>
+			<div class="min-recharge float-left">
+				<span>最低充值</span><input type="number" name="value" class="input-common harf condition" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')" {notempty name="$info['customAmount']"}value="{$info['customAmount']}"{else/}value="0"{/notempty}><em class="unit">元</em>
+			</div>
+		</dd>
+	</dl>
+	<dl>
+		<dt></dt>
+		<dd>
+			<button class="btn-common btn-big" onclick="save();">保存</button>
+			<button class="btn-common-cancle btn-big" onclick="javascript:history.back(-1);">返回</button>
+		</dd>
+	</dl>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+var ADMINMODULE = 'ADMIN_MODULE',
+	URL = '__URL__';
+</script>
+<script src="ADMIN_ADDON_JS/recharge.js"></script>
+{/block}

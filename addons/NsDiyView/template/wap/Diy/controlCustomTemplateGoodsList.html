@@ -1,0 +1,68 @@
+<!-- 商品列表 -->
+{php}
+	$goods_list = api('System.Goods.goodsList', [
+		'page_size' => $custom_template_v['control_data']['goods_list']['goods_limit_count'],
+		'condition' => [
+			'ng.category_id_1' => $custom_template_v['control_data']['goods_list']['goods_source'],
+			'ng.state' => 1
+		]
+	]);
+	$custom_template_v['goods_list'] = $goods_list['data']['data'];
+{/php}
+
+<div class="category-goods-list">
+	<div {if condition="$custom_template_v.control_data.goods_list.goods_list_type eq 1"}class="control-goods-list-big" {else /}class="control-goods-list-small"{/if}>
+		{notempty name="$custom_template_v['goods_list']"}
+		<ul>
+			{foreach $custom_template_v['goods_list'] as $k=>$v}
+			<li>
+				<div class="control-thumbnail" onclick="location.href='{:__URL('APP_MAIN/goods/detail?goods_id='.$v['goods_id'])}'">
+					<div><img src="{:__IMG($v['pic_cover_mid'])}" alt="{$v["goods_name"]}" /></div>
+				</div>
+				
+				{if condition="$custom_template_v['control_data']['goods_list']['goods_show_goods_name'] eq 1"}
+				<h5 class="control-goods-name" onclick="location.href='{:__URL('APP_MAIN/goods/detail?goods_id='.$v['goods_id'])}'">
+					{notempty name="$v.group_name"}<i class="goods-tab ns-bg-color">{$v.group_name}</i>{/notempty}
+					<span>{$v["goods_name"]}</span>
+				</h5>
+				{/if}
+
+				<div class="control-goods-price">
+					{if condition="$custom_template_v['control_data']['goods_list']['goods_show_goods_price'] eq 1"}
+						<em class="ns-text-color" onclick="location.href='{:__URL('APP_MAIN/goods/detail?goods_id='.$v['goods_id'])}'">￥{$v["promotion_price"]}
+						{if condition="$v.shipping_fee==0"}
+						<i class="shipping-fee ns-text-color ns-border-color">包邮</i>
+						{/if}
+						</em>
+					{/if}
+				</div>
+				
+			</li>
+			{/foreach}
+		</ul>
+		{/notempty}
+	</div>
+</div>
+<script>
+$(function(){
+	resizeHeight();
+})
+$(window).resize(function(){
+	resizeHeight();
+});
+function resizeHeight(){
+
+	var height = 0;
+	$(".control-goods-list-small li .control-thumbnail img").each(function(){
+		var self = $(this);
+		$.ajax({
+			url : $(this).attr("src"),
+			success : function(res){
+				height = self.height();
+			},error : function(){
+				if(height>0) self.css("height",height);
+			}
+		});
+	});
+}
+</script>

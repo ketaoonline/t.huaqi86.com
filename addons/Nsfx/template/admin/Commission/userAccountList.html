@@ -1,0 +1,177 @@
+{extend name="$base" /}
+{block name="resources"}
+<style  type="text/css">
+.modal-div{width:90%;margin:auto}
+.modal-dl{overflow:hidden}
+.modal-dl dt{line-height:33px;float:left;font-weight:400}
+.modal-dl dd{float:left}
+.modal-dl dd span{display:block;color:#de533c}
+.btn.off{background-color:#e26f6f;color:#FFF}
+.btn.sure{color:#FFF;background-color:#62c462}
+.color-red{color:#f85606}
+.color-green{color:#22c522}
+.color-blue{color:#27a9e3}
+.text-danger{color:#fb6b5b}
+.table-class tr th:first-child, .table-class tr td:first-child{text-align: left;padding-left: 32px;white-space:nowrap;overflow: hidden;}
+</style>
+{/block}
+{block name="right_tab"}
+<!-- <li><a class="nscs-table-handle_green" href="javascript:;" onclick="addBrand()"><i class="fa fa-plus-circle"></i>&nbsp;添加品牌</a></li> -->
+{/block}
+{block name="main"}
+<table class="mytable">
+	<tr>
+		<th>
+			角色：
+			<select id="role" class="select-common middle">
+				<option value="0">全部</option>
+				<option value="1">分销商</option>
+				<option value="2">股东</option>
+				<option value="3">代理</option>
+			</select>
+			用户名称：<input id="userName" class="input-common middle" type="text" value="">
+			<!-- 手机号：<input id="userTel" class="input-common middle" type="text" value=""> -->
+			<button onclick="searchData()" value="搜索" class="btn-common" >搜索</button>
+		</th>		
+	</tr>
+</table>
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table class="table-class">
+				<colgroup>
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 24%;">
+				</colgroup>
+				<thead>
+					<tr>						
+						<th>用户名称</th>					
+						<th>是否是分销商</th>
+						<th>是否是股东</th>
+						<th>是否是代理</th>						
+						<th>总佣金</th>
+						<th>可提现佣金</th>
+						<th>已提现佣金</th>
+						<th>分销佣金</th>
+						<th>股东分红</th>
+						<th>区域代理佣金</th>
+						<th>操作</th>
+						<!-- <th>股东团队分红</th>
+						<th>分销商团队分红</th>
+						<th>渠道代理分红</th> -->
+					</tr>
+				</thead>
+
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- 修改用户上级（Modal）结束 -->
+{/block}
+{block name="script"}
+<script type="text/javascript">
+	//查询
+	function searchData(){
+		$(".more-search-container").slideUp();
+		LoadingInfo(1);
+	}
+	//加载数据
+	function LoadingInfo(pageIndex) {
+		var user_name = $("#userName").val();
+		var user_phone = $("#userTel").val();
+		var role = $("#role").val();
+		$.ajax({
+			type : "post",
+			url : "{:__URL('__URL__/nsfx/ADMIN_MODULE/Commission/userAccountList')}",
+			data : {
+				"pageIndex" : pageIndex,
+				"user_name":user_name,
+				"user_phone":user_phone,
+				"role":role
+			},
+			success : function(data) {
+				$("#page_count").val(data["page_count"]);
+				$("#pageNumber a").remove();
+				var html = '';
+				console.log(data['data']);
+				if (data["data"].length > 0) {
+					for (var i = 0; i < data["data"].length; i++) {
+						if(data["data"][i]["is_promoter"] ==1){
+							var is_promoter = "<img src='ADMIN_IMG/checked1.png' alt='' width='15'/>";						
+						}else{
+							var is_promoter = "<img src='ADMIN_IMG/un_checked.png' alt='' width='15'/>";	
+						}
+						if(data["data"][i]["is_partner"] ==1){
+							var partner = '<a href="'+__URL('__URL__/nsfx/ADMIN_MODULE/Commission/useraccountrecordsdetail?type_id=4&uid='+data["data"][i]["uid"])+'">股东分红</a><a href="'+__URL('__URL__/nsfx/ADMIN_MODULE/Commission/useraccountrecordsdetail?type_id=5&uid='+data["data"][i]["uid"])+'">全球分红</a><br>';
+							var is_partner = "<img src='ADMIN_IMG/checked1.png' alt='' width='15'/>";						
+						}else{
+							var partner = "";
+							var is_partner = "<img src='ADMIN_IMG/un_checked.png' alt='' width='15'/>";		
+						}
+						if(data["data"][i]["is_region_agent"] ==1){
+							var region_agent = '<a href="'+__URL('__URL__/nsfx/ADMIN_MODULE/Commission/useraccountrecordsdetail?type_id=2&uid='+data["data"][i]["uid"])+'" target="_blank">代理佣金</a>';
+							var is_region_agent = "<img src='ADMIN_IMG/checked1.png' alt='' width='15'/>";						
+						}else{
+							var region_agent = "";
+							var is_region_agent = "<img src='ADMIN_IMG/un_checked.png' alt='' width='15'/>";			
+						}
+						
+						html += '<tr align="center">';	
+						var user_headimg = '__STATIC__/images/default_user_portrait.gif';
+						var real_name = '--';
+						if(data["data"][i]["user_headimg"] != "" && data["data"][i]["user_headimg"] != null){
+							user_headimg = "__UPLOAD__/"+data["data"][i]["user_headimg"];
+						}
+						if(data["data"][i]["real_name"] != "" && data["data"][i]["real_name"] != null){
+							real_name = data["data"][i]["real_name"];
+						}
+						html += '<td title="'+real_name+'"><img src="'+user_headimg+'" class="head-portrait" />&nbsp;&nbsp;' + real_name + '</td>';
+						html += '<td>' + is_promoter + '</td>';
+						html += '<td>' + is_partner + '</td>';
+						html += '<td>' + is_region_agent + '</td>';
+						html += '<td class="color-red">' + parseFloat(data["data"][i]["commission"]).toFixed(2) + '</td>';
+						html += '<td class="color-green">' + parseFloat(data["data"][i]["commission_cash"]).toFixed(2) + '</td>';
+						html += '<td class="color-blue">' + parseFloat(data["data"][i]["commission_withdraw"]).toFixed(2) + '</td>';
+						html += '<td>' + parseFloat(data["data"][i]["commission_promoter"]).toFixed(2) + '</td>';
+						html += '<td>' + parseFloat(data["data"][i]["commission_partner"]).toFixed(2) + '</td>';
+						html += '<td>' + parseFloat(data["data"][i]["commission_region_agent"]).toFixed(2) + '</td>';
+						
+						html += '<td  align="center">';
+						html += '<a href="'+__URL('__URL__/nsfx/ADMIN_MODULE/Commission/promoterAccount?uid='+data["data"][i]["uid"])+'">账户详情</a><br/>';
+							html += '<a href="'+__URL('__URL__/nsfx/ADMIN_MODULE/Commission/useraccountrecordsdetail?type_id=1&uid='+data["data"][i]["uid"])+'">分销佣金</a><br>'+partner+''+region_agent+'';
+						html += '</td>';
+						html += '</tr>';
+					}
+				} else {
+					html += '<tr text-align="center"><td colspan="11" style="text-align:center;">暂无符合条件的数据记录</td></tr>';
+				}
+				
+				$(".style0list tbody").html(html);
+				var totalpage = $("#page_count").val();
+				if (totalpage == 1) {
+					changeClass("all");
+				}
+				initPageData(data["page_count"],data['data'].length,data['total_count']);
+				var $html = pagenumShow(jumpNumber,totalpage,{$pageshow});
+				$("#pageNumber").append($html);
+			}
+		});
+	}	
+	//全选
+	function CheckAll(event){
+		var checked = event.checked;
+		$(".style0list tbody input[type = 'checkbox']").prop("checked",checked);
+	}
+	
+</script>
+{/block}

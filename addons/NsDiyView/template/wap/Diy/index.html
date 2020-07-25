@@ -1,0 +1,137 @@
+{extend name="$base" /}
+
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="WAP_ADDON_CSS/components.css">
+<link rel="stylesheet" type="text/css" href="WAP_ADDON_CSS/iconfont.css">
+<link rel="stylesheet" href="WAP_PLUGIN/swiper/css/swiper.min.css"/>
+{/block}
+
+{block name="head"}
+<!-- 标识：是否显示顶部关注  0：[隐藏]，1：[显示]-->
+{if condition="$is_subscribe == 1"}
+<div class="fixed-focus-on">
+	<i class="close" onclick="$('.fixed-focus-on').hide();">x</i>
+	<div class="foucs-on-block">
+		<div class="foucs-block">
+		{if condition="$source_img_url != ''"}
+			<img class="user-bg" src="{:__IMG($source_img_url)}">
+			{else/}
+			<img class="user-bg" src="{:__IMG($web_info['web_wechat_share_logo'])}">
+		{/if}
+		</div>
+		{if condition="$source_user_name != ''"}
+		<p>{:lang("i_am_your_best_friend")}<span>{$source_user_name}</span>,{:lang("recommended_to_you_business_from_now")}</p>
+		{else/}
+		<p>{:lang("you_are_not_currently_concerned_about_the_WeChat_public_account")}，{:lang("click_on_the_attention")}</p>
+		{/if}
+		<button id="subscribe">{:lang("click_on_the_attention")}</button>
+	</div>
+</div>
+{/if}
+
+{php}
+//WAP端首页浮层
+$wap_floating = api('System.Shop.wapFloating');
+$wap_floating = $wap_floating['data'];
+{/php}
+{notempty name="$wap_floating"}
+{if condition="$wap_floating['is_show'] == 1"}
+<div class="wap-floating">
+	<a class="close-wrap" href="javascript:;"><img src="WAP_IMG/index/floating_layer_close.png"></a>
+    {if is_url($wap_floating['nav_url'])}
+	<a class="img-wrap" href="{$wap_floating['nav_url']}">
+    {else/}
+    <a class="img-wrap" href="{:__URL('APP_MAIN' . $wap_floating['nav_url'])}">
+
+    {/if}
+        <img src="{:__IMG($wap_floating.nav_icon)}" alt="浮层图片" />
+    </a>
+</div>
+{/if}
+{/notempty}
+
+<!-- 遮罩层 -->
+<div class="shade" style="position:fixed;top:0;left:0;width:100%;height:100%;margin-top:0;background: rgba(0, 0, 0, 0.7);z-index: 999;display:none;"><span style="float: right; padding: 15px;font-size: 22px;color: #fff;background: transparent;" id="close">X</span></div>
+<!-- 弹出层 --> 
+<div class="popup" style="position:fixed;top: 36%;left: 0;width: 100%;height: 100%;margin-left:0;display:none;">
+	<div class="code">
+		<div style="overflow: hidden;">
+			<img src="{:__IMG($web_info.web_qrcode)}"  style="max-width: 100%;margin-top: 10px;"/>
+			<div style="color:#666; margin-bottom: 10px;">{:lang("press_two_dimensional_code_public_concern_WeChat")}</div>
+		</div>
+	</div>
+</div>
+{/block}
+
+{block name="main" }
+<div class="com-content">
+	{include file="./addons/NsDiyView/template/wap/Diy/customTemplateControlSwitch.html" /}
+</div>
+{/block}
+
+{block name="script"}
+<script src="WAP_PLUGIN/swiper/js/swiper.min.js"></script>
+<script src="WAP_JS/jquery.liMarquee.js"></script>
+<script>
+var footer_flag = "base_footer";
+$(function(){	
+	var swiper = new Swiper('.swiper-container', {
+	    autoplay: 2500,
+	    loop : true
+	})
+	
+	var lang_index = {
+		activity_over : "{:lang('activity_over')}",
+		days : "{:lang('days')}"
+	};
+	
+	var mask_wap_floating = new MaskLayer(".wap-floating", function () {
+		mask_wap_floating.show();
+	});
+	// 首页浮层
+	var wap_floating = "";
+	api("System.Shop.wapFloating", {}, function(res){
+		wap_floating = res['data'];	
+		wap_floating.show_type = wap_floating.show_type == undefined ? 'once' : wap_floating.show_type;
+		wap_floating.show_num = wap_floating.show_num == undefined ? 1 : wap_floating.show_num;
+	}, false)
+	
+	function refreshFloating() {
+		if ($.cookie("index_wap_floating_layer") == null) {
+			$(".wap-floating").fadeIn();
+			mask_wap_floating.show();
+		} else {
+			var wap_floating_cookie = JSON.parse($.cookie("index_wap_floating_layer"));
+			if (wap_floating.nav_icon != wap_floating_cookie.imgPath) {
+				$(".wap-floating").fadeIn();
+				mask_wap_floating.show();
+			} else {
+				if (wap_floating.show_type == 'many' && wap_floating_cookie.closeNum < wap_floating.show_num) {
+					$(".wap-floating").fadeIn();
+					mask_wap_floating.show();
+				}
+			}
+		}
+	}
+	
+	$(".wap-floating .close-wrap").click(function () {
+		mask_wap_floating.hide();
+		$(".wap-floating").fadeOut();
+		var closeNum = 1;
+		if ($.cookie("index_wap_floating_layer") != null) {
+			var wap_floating_cookie = JSON.parse($.cookie("index_wap_floating_layer"));
+			if (wap_floating.nav_icon == wap_floating_cookie.imgPath) {
+				closeNum = wap_floating_cookie.closeNum + 1;
+			}
+		}
+		if (wap_floating.show_type == 'many') {
+			$.cookie("index_wap_floating_layer", JSON.stringify({imgPath : wap_floating.nav_icon, closeNum : closeNum}), {expires: 1});
+		} else {
+			$.cookie("index_wap_floating_layer", JSON.stringify({imgPath : wap_floating.nav_icon, closeNum : closeNum}), {expires: 7});
+		}
+	});
+	
+	if (wap_floating.is_show == 1 && wap_floating.nav_icon != '') refreshFloating();
+})
+</script>
+{/block}

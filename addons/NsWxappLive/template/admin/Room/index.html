@@ -1,0 +1,207 @@
+{extend name="$base" /}
+{block name="resources"}
+<style>
+    .ns-main{margin-top:0px;}
+</style>
+{/block}
+{block name="main"}
+<table class="mytable">
+    <tr>
+        <th style="text-align: left;">
+            <button class="btn-common" onclick="syncLiveRoom()" style="margin:0 !important;">同步直播间</button>
+            <button class="btn-common" onclick="javascript:syncPlayBacks();">批量同步回放列表</button>
+        </th>
+        <td>
+            <select id="select-room-status" class="select-common">
+
+                <option value="all">全部</option>
+                {foreach  name="$live_status_maps" item="vo" key="k"}
+                <option value="{$k}">{$vo}</option>
+                {/foreach}
+            </select>
+            <input type="text" id='search-text' placeholder="请输入关键词" class="input-common" />
+            <input type="button" class="btn-common" onclick="searchData()" value="搜索" />
+        </td>
+    </tr>
+</table>
+<table class="table-class" id="live-rooms">
+    <colgroup>
+        <col style="width: 2%;">
+        <col style="width: 2%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 8%;">
+        <col style="width: 8%;">
+        <col style="width: 10%;">
+    </colgroup>
+    <thead>
+    <tr align="center">
+        <th>
+            <i class="checkbox-common" input_all ="#productTbody">
+                <input type="checkbox" id="check_all">
+            </i>
+        </th>
+        <th align="center"></th>
+        <th>房间 id</th>
+        <th>直播间名称</th>
+        <th>主播名</th>
+        <th>开播时间</th>
+        <th>结束时间</th>
+        <th>直播状态</th>
+        <th>回放状态</th>
+        <th>是否推荐</th>
+        <th>是否顶置</th>
+        <th>是否显示</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    function LoadingInfo(page_index) {
+        var keyword = $("#search-text").val();
+        var room_status = $("#select-room-status").val();
+        $.ajax({
+            type : "post",
+            url : "{:__URL('__URL__/NsWxappLive/ADMIN_MODULE/room/index')}",
+            data : {"page_index" : page_index, "page_size" : $("#showNumber").val(), "keyword" : keyword, "live_status" : room_status},
+            success : function(data) {
+                if (data["data"].length > 0) {
+                    $(".table-class tbody").empty();
+                    for (var i = 0; i < data["data"].length; i++) {
+                        var html = '';
+                        html += '<tr align="center">';
+                        html += '<td class="td-'+ data["data"][i]['id'] +'">\n' +
+                            '\t\t\t\t\t\t\t<i class="checkbox-common">\n' +
+                            '\t\t\t\t\t\t\t\t<input value="'+ data["data"][i]['id'] +'" name="sub" type="checkbox">\n' +
+                            '\t\t\t\t\t\t\t</i>\n' +
+                            '\t\t\t\t\t\t</td>';
+                        html += '<td></td>';
+                        html += '<td>' + data['data'][i]['room_id'] +'</td>';
+                        html += '<td>' + data["data"][i]["name"] + '</td>';
+                        html += '<td>' + data["data"][i]["anchor_name"] + '</td>';
+                        html += '<td>' + data["data"][i]["start_time"] + '</td>';
+                        html += '<td>' + data["data"][i]["end_time"] + '</td>';
+                        html += '<td>' + data["data"][i]["status_zh"] +'</td>';
+                        if (data['data'][i]['has_play_backs'] == 1) {
+                            html += '<td>' + data["data"][i]["play_back_expire_zh"] +'</td>';
+                        } else {
+                            html += '<td>暂无回放</td>';
+                        }
+                        if(data["data"][i]["is_recommend"] == 1){
+                            html += '<td ><a href="javascript:;" class="is_visible" onclick="changeStatus('+data["data"][i]["id"]+', '+ data["data"][i]["is_recommend"] +', \'is_recommend\')"><img src="ADMIN_IMG/checked1.png" alt="" width="15"/></a></td>';
+                        }else{
+                            html += '<td ><a href="javascript:;" class="is_visible" onclick="changeStatus('+data["data"][i]["id"]+', '+ data["data"][i]["is_recommend"] +', \'is_recommend\')"><img src="ADMIN_IMG/un_checked.png" alt="" width="15"/></a></td>';
+                        }
+                        if(data["data"][i]["is_top"] == 1){
+                            html += '<td ><a href="javascript:;" class="is_visible" onclick="changeStatus('+data["data"][i]["id"]+', '+ data["data"][i]["is_top"] +', \'is_top\')"><img src="ADMIN_IMG/checked1.png" alt="" width="15"/></a></td>';
+                        }else{
+                            html += '<td ><a href="javascript:;" class="is_visible" onclick="changeStatus('+data["data"][i]["id"]+', '+ data["data"][i]["is_top"] +', \'is_top\')"><img src="ADMIN_IMG/un_checked.png" alt="" width="15"/></a></td>';
+                        }
+                        if (data['data'][i]['is_show'] == 1) {
+                            html += '<td ><a href="javascript:;" class="is_show" onclick="changeStatus('+data["data"][i]["id"]+', '+ data["data"][i]["is_show"] +', \'is_show\')"><img src="ADMIN_IMG/checked1.png" alt="" width="15"/></a></td>';
+                        } else {
+                            html += '<td ><a href="javascript:;" class="is_show" onclick="changeStatus('+data["data"][i]["id"]+', '+ data["data"][i]["is_show"] +', \'is_show\')"><img src="ADMIN_IMG/un_checked.png" alt="" width="15"/></a></td>';
+                        }
+                        html += '<td>';
+                        if (data['data'][i]['live_status'] == 103) {
+                            html += '<a href="' + __URL("__URL__/NsWxappLive/ADMIN_MODULE/room/playBack?id="+data['data'][i]['id']) + '">回放</a>';
+                        }
+                        html += '<a href="' + __URL("__URL__/NsWxappLive/ADMIN_MODULE/room/show?id="+data['data'][i]['id']) + '">详情</a></td>';
+                        html += '</tr>';
+                        $(".table-class tbody").append(html);
+                    }
+                } else {
+                    var html = '<tr align="center"><td colspan="12">暂无符合条件的数据记录</td></tr>';
+                    $(".table-class tbody").html(html);
+                }
+                initPageData(data["page_count"],data['data'].length,data['total_count']);
+                $("#pageNumber").html(pagenumShow(jumpNumber,$("#page_count").val(),{$pageshow}));
+            }
+        });
+    }
+
+    function syncLiveRoom(page_index = 1) {
+        $.ajax({
+            type : "post",
+            data : {"page_index" : page_index},
+            url : "{:__URL('__URL__/NsWxappLive/ADMIN_MODULE/room/syncLiveRoom')}",
+            success : function(data) {
+                if (data['code'] > 0) {
+                    if (data['data']['page_index'] <= data['data']['total']) {
+                        syncLiveRoom(data['data']['page_index']);
+                    } else {
+                        showTip('同步完成', 'success');
+                        window.location.reload();
+                    }
+                } else {
+                    showTip(data['message'], 'error');
+                }
+            }
+        });
+    }
+
+    function changeStatus(id, value, type) {
+        $.ajax({
+            type : "post",
+            data : {'type' : type, 'value': value, 'id': id},
+            url : "{:__URL('__URL__/NsWxappLive/ADMIN_MODULE/room/modifyRoomStatus')}",
+            success : function(data) {
+                if (data['code'] > 0) {
+                    showTip('修改成功', 'success');
+                    window.location.reload();
+                } else {
+                    showTip(data['message'], 'error');
+                }
+            }
+        });
+    }
+
+    function syncPlayBacks(page_index=1) {
+        var ids = '';
+        $("#live-rooms input[type='checkbox']:checked").each(function() {
+            if (!isNaN($(this).val())) {
+                var id = $(this).val();
+                if (id != '') {
+                    syncLiveRoomPalyback(id);
+                }
+                ids = id + "," + ids;
+            }
+        });
+        ids = ids.substring(0, ids.length - 1);
+        if(ids == ""){
+            showTip("请选择需要操作的记录", "warning");
+            return false;
+        }
+    }
+
+    function syncLiveRoomPalyback(id, page_index = 1) {
+        $.ajax({
+            type : "post",
+            data : {"id": id, "page_index" : page_index},
+            url : "{:__URL('__URL__/NsWxappLive/ADMIN_MODULE/room/syncLivePlayBack')}",
+            success : function(data) {
+                if (data['code'] > 0) {
+                    if (data['data']['page_index'] <= data['data']['total']) {
+                        syncLiveRoomPalyback(id, data['data']['page_index']);
+                    } else {
+                        showTip('同步完成', 'success');
+                        window.location.reload();
+                    }
+                } else {
+                    showTip(data['message'], 'error');
+                }
+            }
+        });
+    }
+    function searchData(){
+        LoadingInfo(1);
+    }
+</script>
+{/block}

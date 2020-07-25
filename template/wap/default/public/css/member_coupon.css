@@ -1,0 +1,16 @@
+.cf-container{max-width: 640px;background: #fff;overflow: hidden; border-bottom: 1px solid; margin-bottom: 10px}
+.cf-container ul li{display: block;line-height: 2.1rem; text-align: center; width: 33%; float: left;}
+.cf-container ul li.selected a{padding: 0 3px;display: inline-block; width: 100%; border-bottom: 2px solid;}
+.coupon-contianer{padding:10px; background: #fff;}
+.coupon-contianer .coupon-item{padding-left: 95px; height:95px; position: relative; color: #000;background-color:#ffe6eb;margin-bottom:10px;}
+.coupon-contianer .coupon-item .coupon-type{width: 95px; height: 95px; line-height: 95px; position: absolute; top: 0; left: 0; text-align: left; background: url(../img/member/coupon_type_item.png) no-repeat 0; background-size: 95px 95px; padding-top: 4px;}
+.coupon-contianer .coupon-item section .coupon-title{padding: 16px 0 0 10px;}
+.coupon-contianer .coupon-item section .coupon-title i{font-size: 14px;}
+.coupon-contianer .coupon-item section .coupon-title em{font-size: 16px; font-weight: bold;}
+.coupon-contianer .coupon-item section .coupon-title span{margin-left: 5px;}
+.coupon-contianer .coupon-item section .coupon-time{margin-top:2px;padding: 0 10px 0 10px; font-size: 14px; opacity: .6;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.coupon-contianer .coupon-desc{padding: 0px 10px;font-size: 12px; border-top: none;margin-top:4px}
+.text-center{text-align:center;line-height:40px;}
+.coupon-type img{height:88%}
+.coupon-item a{position: absolute;right: 11px;top: 16px; color:#fff; background: #f02b18;font-size: 12px;padding: 2px 5px 1px 5px;border-radius: 32px;}
+.coupon-item .line{border: 0.5px solid #ccc;margin-top: 5px;}

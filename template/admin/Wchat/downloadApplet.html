@@ -1,0 +1,223 @@
+{extend name="admin/base" /}
+{block name="resources"}
+<style>
+.ns-steps {display:flex}
+.ns-steps-simple {padding:13px 8%;border-radius:4px;background:#F5F7FA}
+.ns-steps-horizontal {white-space:nowrap}
+.ns-steps-vertical {height:100%;}
+.ns-step {position:relative;flex:1;}
+.ns-step:last-of-type .ns-step-line {display:none}
+.ns-step:last-of-type.is-flex {-ms-flex-preferred-size:auto!important;flex-basis:auto!important;-ms-flex-negative:0;flex-shrink:0;-webkit-box-flex:0;-ms-flex-positive:0;flex-grow:0}
+.ns-step:last-of-type .ns-step-description,.ns-step:last-of-type .ns-step-main {padding-right:0}
+.ns-step-head {position:relative;width:100%}
+.ns-step-head.is-process {color:#126AE4;border-color:#126AE4}
+.ns-step-icon {position:relative;z-index:1;display:-webkit-inline-box;display:-ms-inline-flexbox;display:inline-flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;width:24px;height:24px;font-size:14px;-webkit-box-sizing:border-box;box-sizing:border-box;background:#FFF;-webkit-transition:.15s ease-out;transition:.15s ease-out}
+.ns-step-icon.is-text {border-radius:50%;border:2px solid;border-color:inherit}
+.ns-step-icon.is-icon {width:40px}
+.ns-step-icon-inner {display:inline-block;-ms-user-select:none;user-select:none;text-align:center;font-weight:700;line-height:1;color:inherit}
+.ns-step-icon-inner[class*=ns-icon]:not(.is-status) {font-size:25px;font-weight:400}
+.ns-step-icon-inner.is-status {-webkit-transform:translateY(1px);transform:translateY(1px)}
+.ns-step-line {position:absolute;border-color:inherit;background-color:#126AE4}
+.ns-step-line-inner {display:block;border-width:1px;border-style:solid;border-color:inherit;-webkit-transition:.15s ease-out;transition:.15s ease-out;-webkit-box-sizing:border-box;box-sizing:border-box;width:0;height:0}
+.ns-step-main {white-space:normal;text-align:left}
+.ns-step-title {font-size:14px;line-height:30px}
+.ns-step-title.is-process {font-weight:700;color:#126AE4}
+.ns-step-description {padding-right:10%;margin-top:-5px;font-size:12px;line-height:20px;font-weight:400}
+.ns-step-description.is-process {color:#126AE4}
+.ns-step.is-horizontal {display:inline-block}
+.ns-step.is-horizontal .ns-step-line {height:2px;top:11px;left:0;right:0}
+.ns-step.is-vertical {display:flex}
+.ns-step.is-vertical .ns-step-head {-webkit-box-flex:0;-ms-flex-positive:0;flex-grow:0;width:24px}
+.ns-step.is-vertical .ns-step-main {padding-left:10px;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}
+.ns-step.is-vertical .ns-step-title {line-height:24px;padding-bottom:8px}
+.ns-step.is-vertical .ns-step-line {width:2px;top:0;bottom:0;left:11px}
+.ns-step.is-center .ns-step-head,.ns-step.is-center .ns-step-main {text-align:center}
+.ns-step.is-center .ns-step-description {padding-left:20%;padding-right:20%}
+.ns-step.is-center .ns-step-line {left:50%;right:-50%}
+.version-list {padding:0 10px;}
+.table-class {text-align:center;}
+.explain {border: none}
+</style>
+{/block}
+{block name="main"}
+<div class="set-style">
+	<h4 class="first"><span></span>发布步骤</h4>
+	<div class="ns-steps ns-steps-horizontal" style="padding: 20px 0;">
+	    <div class="ns-step is-horizontal is-center" style="margin-right: 0px;">
+	        <div class="ns-step-head is-process">
+	            <div class="ns-step-line" style="margin-right: 0px;">
+	                <i class="ns-step-line-inner" style="transition-delay: 0ms; border-width: 0px; width: 0%;"></i>
+	            </div>
+	            <div class="ns-step-icon is-text">
+	                <div class="ns-step-icon-inner">1</div>
+	            </div>
+	        </div>
+	        <div class="ns-step-main">
+	            <div class="ns-step-title is-process">下载微信开发者工具</div>
+	            <div class="ns-step-description">如果已经安装可跳过这一步。如果没有请先下载<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank"> 微信开发者工具 </a></div>
+	        </div>
+	    </div>
+	    <div class="ns-step is-horizontal is-center" style="margin-right: 0px;">
+	        <div class="ns-step-head is-process">
+	            <div class="ns-step-line" style="margin-right: 0px;">
+	                <i class="ns-step-line-inner" style="transition-delay: -150ms; border-width: 0px; width: 0%;"></i>
+	            </div>
+	            <div class="ns-step-icon is-text">
+	                <div class="ns-step-icon-inner">2</div></div>
+	        </div>
+	        <div class="ns-step-main">
+	            <div class="ns-step-title is-process">下载所需版本小程序源码</div>
+	            <div class="ns-step-description">
+	            	在下方点击下载所需版本小程序源码
+	            </div>
+	        </div>
+	    </div>
+	    <div class="ns-step is-horizontal is-center" style="max-width: 33.3333%;">
+	        <div class="ns-step-head is-process">
+	            <div class="ns-step-line">
+	                <i class="ns-step-line-inner"></i>
+	            </div>
+	            <div class="ns-step-icon is-text">
+	                <div class="ns-step-icon-inner">3</div></div>
+	        </div>
+	        <div class="ns-step-main">
+	            <div class="ns-step-title is-process">使用开发者工具上传小程序源码</div>
+	            <div class="ns-step-description">
+	            	使用开发者工具打开下载下来的小程序源码，配置好后点击“上传”上传小程序。
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<h4 class="first"><span></span>小程序源码下载</h4>
+	<div class="version-list">
+		<table class="table-class">
+			<colgroup>
+				<col style="width: 5%;">
+				<col style="width: 19%;">
+				<col style="width: 19%;">
+				<col style="width: 19%;">
+				<col style="width: 19%;">
+				<col style="width: 19%;">
+			</colgroup>
+			<thead>
+				<tr>
+					<th></th>
+					<th>小程序版本</th>
+					<th>版本编码</th>
+					<th>发布时间</th>
+					<th>更新说明</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>	
+		</table>
+	</div>
+</div>
+
+<div class="modal fade hide" id="update_explain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>版本更新说明</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-common" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var versionList = [];
+function getAppletVersionList(){
+	$.ajax({
+		url: '{:__URL("ADMIN_MAIN/wchat/downloadApplet")}',
+		type: 'POST',
+		data: {mark: '{$mark}'},
+		success: function(res){
+			var html = '';
+			if (res.data.length) {
+				versionList = res.data;
+				res.data.forEach(function(item, index){
+					//alert(item.version_name);
+					html += `
+						<tr>
+							<td></td>
+							<td>`+ item.version_name +`</td>
+							<td>`+ item.version_release +`</td>
+							<td>`+ timeStampTurnTime(item.create_time) +`</td>
+							<td><a onclick="showUpdateExplain(`+ index +`)">查看更新说明</a></td>
+							<td>
+								{if $type eq 'os'}
+									<a  onclick="getAppletInfo('{$mark}','co',`+ item.version_release +`)">下载编译版</a>
+									<a  onclick="getAppletInfo('{$mark}','os',`+ item.version_release +`)">下载开源版</a>
+									<a  onclick="getAppletInfo('{$mark}','up',`+ item.version_release +`)">下载更新包</a>
+								{else/}
+									<a onclick="getAppletInfo('{$mark}','co',`+ item.version_release +`)">下载编译版</a>
+								{/if}
+							</td>
+						</tr>
+					`;
+				})
+			} else {
+				html += '<tr align="center"><td colspan="5">暂无符合条件的数据记录</td></tr>';
+			}
+			$(".table-class tbody").html(html);
+		}	
+	})
+}
+
+function showUpdateExplain(index){
+	$('#update_explain .modal-body').html('<pre class="explain">' + versionList[index].version_desc + '</pre>');
+	$("#update_explain").modal("show");
+}
+
+function getAppletInfo(mark, type, release){
+	$.ajax({
+		url: '{:__URL("ADMIN_MAIN/wchat/download")}',
+		type: 'POST',
+		data: {mark: '{$mark}', type:type, release:release},
+		success: function(res){
+			if(res.code >= 0){
+				window.open( __URL('ADMIN_MAIN/wchat/toDownload?token=' + res.data.token),'_blank');  
+				
+			}else if(res.code == "-1"){
+                $( "#dialog").dialog({
+                    buttons: {
+                        "确定,#00A0DE,#fff": function() {
+                            location.href = 'https://www.niushop.com.cn';
+                        },
+                        "取消,#f5f5f5,#666": function() {
+                            $(this).dialog('close');
+                            return false;
+                        }
+                    },
+                    contentText:res.message+", 是否去官网重新下载证书?",
+                    msgType : "error"
+                });
+			}else if (res.code == "-1000"){
+                $( "#dialog").dialog({
+                    buttons: {
+                        "确定,#00A0DE,#fff": function() {
+                            location.href = 'https://www.niushop.com.cn';
+                        },
+                        "取消,#f5f5f5,#666": function() {
+                            $(this).dialog('close');
+                            return false;
+                        }
+                    },
+                    contentText:res.message+", 是否去官网升级小程序授权?",
+                    msgType : "error"
+                });
+			}
+		}
+	})
+}
+getAppletVersionList();
+</script>
+{/block}

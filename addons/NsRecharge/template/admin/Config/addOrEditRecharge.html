@@ -1,0 +1,299 @@
+{extend name="$base" /}
+{block name="resources"}
+<link rel="stylesheet" href="ADMIN_ADDON_CSS/addOrEditRecharge.css">
+{/block}
+
+{block name="main"}
+<div class="set-style layui-form">
+	<h4><span></span>基本信息</h4>
+	<dl>
+		<dt><span class="required">*</span>活动名称：</dt>
+		<dd>
+			<input type="text" name="activity_name" maxlength="40" class="input-common" autocomplete="off" {notempty name="$info"}value="{$info.activity_name}"{/notempty}>
+			<p class="error"></p>
+		</dd>
+	</dl>
+	<dl>
+		<dt><span class="required">*</span>生效时间：</dt>
+		<dd>
+			<input class="input-medium input-common harf" type="text" name="start_time" autocomplete="off" id="start_time" {notempty name="$info"}value="{$info.start_time|date='Y-m-d H:i:s',###}"{/notempty}>
+			<span class="mlr5">至</span>
+			<input class="input-medium input-common harf" size="15" type="text" name="end_time" autocomplete="off" id="end_time" {notempty name="$info"}value="{$info.end_time|date='Y-m-d H:i:s',###}"{/notempty}>
+			<p class="error"></p>
+			<p class="hint">活动到期后将自动失效，失效后不可延长</p>
+		</dd>
+	</dl>
+	<h4><span></span>活动设置</h4>
+	<dl>
+		<dt>活动类型：</dt>
+		<dd>
+			{notempty name="$info"}
+			<label class="radio inline normal">
+				<i class="radio-common {eq name="$info['activity_type']" value="1"}selected{/eq}">
+					<input type="radio" value="1" name="activity_type" {eq name="$info['activity_type']" value="1"}checked{/eq}></i>
+				<span>单次充值满xx元</span>
+			</label>
+			<label class="radio inline normal">
+				<i class="radio-common {eq name="$info['activity_type']" value="2"}selected{/eq}">
+					<input type="radio" value="2" name="activity_type" {eq name="$info['activity_type']" value="2"}checked{/eq}></i>
+				<span>单次充值每满xx元</span>
+			</label>
+			{else/}
+			<label class="radio inline normal">
+				<i class="radio-common selected"><input type="radio" value="1" name="activity_type" checked></i>
+				<span>单次充值满xx元</span>
+			</label>
+			<label class="radio inline normal">
+				<i class="radio-common"><input type="radio" value="2" name="activity_type"></i>
+				<span>单次充值每满xx元</span>
+			</label>
+			{/notempty}
+		</dd>
+	</dl>
+	<dl>
+		<dt><span class="required">*</span>适用场景：</dt>
+		<dd>
+			{notempty name="$info"}
+			<label class="inline">
+				<i class="checkbox-common {if in_array('business', $info['scene'])}selected{/if}">
+					<input type="checkbox" value="business" name="scene" {if in_array('business', $info['scene'])}checked{/if}>
+				</i>
+				<span>商家充值</span>
+			</label>
+			<label class="inline">
+				<i class="checkbox-common {if in_array('member', $info['scene'])}selected{/if}">
+					<input type="checkbox" value="member" name="scene" {if in_array('member', $info['scene'])}checked{/if}>
+				</i>
+				<span>会员充值</span>
+			</label>
+			<p class="error"></p>
+			{else/}
+			<label class="inline">
+				<i class="checkbox-common">
+					<input type="checkbox" value="business" name="scene">
+				</i>
+				<span>商家充值</span>
+			</label>
+			<label class="inline">
+				<i class="checkbox-common">
+					<input type="checkbox" value="member" name="scene">
+				</i>
+				<span>会员充值</span>
+			</label>
+			<p class="error"></p>
+			{/notempty}
+		</dd>
+	</dl>
+	<dl>
+		<dt>活动信息：</dt>
+		<dd> 
+			<div class="level-list">
+				{notempty name="$info"}
+					{foreach name="$info['data']" item="vo" key="k"}
+					<div class="level-container">
+						<div class="left-box">
+							<p class="box-title">赠送条件</p>
+							<div>
+								满<input type="number" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')" value="{$vo.condition}"><em class="unit">元</em>
+							</div>
+							<p class="error" style="padding-left: 25px;"></p>
+						</div>
+						<div class="right-box">
+							<p class="box-title">赠送内容 {gt name="k" value="0"}<a href="javascript:;" class="del">删除层级</a>{/gt}</p>
+							<div class="give-content-list">
+								{foreach name="$vo['giveCont']" item="go"}
+								<div class="item">
+									<select name="give_type" class="select-common harf">
+										<option value="point" {eq name="$go['type']" value="point"}selected{/eq}>积分</option>
+										<option value="balance" {eq name="$go['type']" value="balance"}selected{/eq}>余额</option>
+										<option value="pointratio" {eq name="$go['type']" value="pointratio"}selected{/eq}>按比例赠送积分</option>
+										<option value="balanceratio" {eq name="$go['type']" value="balanceratio"}selected{/eq}>按比例赠送余额</option>
+										<option value="coupon" {eq name="$go['type']" value="coupon"}selected{/eq}>优惠券</option>
+									</select>
+									<div class="give_type">
+										<span data-type="point" {neq name="$go['type']" value="point"}class="hide"{/neq}>
+											<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')" {eq name="$go['type']" value="point"}value="{$go.value}"{/eq}><em class="unit">分</em>
+										</span>
+										<span data-type="balance" {neq name="$go['type']" value="balance"}class="hide"{/neq}>
+											<input type="number" name="value" class="input-common harf condition" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')" {eq name="$go['type']" value="balance"}value="{$go.value}"{/eq}><em class="unit">元</em>
+										</span>
+										<span data-type="pointratio" {neq name="$go['type']" value="pointratio"}class="hide"{/neq}>
+											<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')" {eq name="$go['type']" value="pointratio"}value="{$go.value}"{/eq}><em class="unit">%</em>
+										</span>
+										<span data-type="balanceratio" {neq name="$go['type']" value="balanceratio"}class="hide"{/neq}>
+											<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')" {eq name="$go['type']" value="balanceratio"}value="{$go.value}"{/eq}><em class="unit">%</em>
+										</span>
+										<span data-type="coupon" {neq name="$go['type']" value="coupon"}class="hide"{/neq}>
+											<select name="value" class="select-common harf" {eq name="$go['type']" value="coupon"}data-value="{$go.value}"{/eq}>
+												<option value="0">请选择优惠券</option>
+											</select>
+											<span class="add-new-coupon">
+												<a href="javascript:;" class="refresh">刷新</a><span class="space">|</span><a href="{:__URL('ADMIN_MAIN/promotion/addcoupontype')}" target="_blank">创建</a>
+											</span>
+										</span>
+									</div>
+									<p class="error" style="padding-left: 140px;"></p>
+								</div>
+								{/foreach}
+							</div>
+							<button class="btn-common-white btn-small add-give-content">添加赠送内容</button>
+						</div>
+					</div>
+					{/foreach}
+				{else/}
+				<div class="level-container">
+					<div class="left-box">
+						<p class="box-title">赠送条件</p>
+						<div>
+							满<input type="number" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">元</em>
+						</div>
+						<p class="error" style="padding-left: 25px;"></p>
+					</div>
+					<div class="right-box">
+						<p class="box-title">赠送内容</p>
+						<div class="give-content-list">
+							<div class="item">
+								<select name="give_type" class="select-common harf">
+									<option value="point">积分</option>
+									<option value="balance">余额</option>
+									<option value="pointratio">按比例赠送积分</option>
+									<option value="balanceratio">按比例赠送余额</option>
+									<option value="coupon">优惠券</option>
+								</select>
+								<div class="give_type">
+									<span data-type="point">
+										<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">分</em>
+									</span>
+									<span data-type="balance" class="hide">
+										<input type="number" name="value" class="input-common harf condition" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')"><em class="unit">元</em>
+									</span>
+									<span data-type="pointratio" class="hide">
+										<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">%</em>
+									</span>
+									<span data-type="balanceratio" class="hide">
+										<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">%</em>
+									</span>
+									<span data-type="coupon" class="hide">
+										<select name="value" class="select-common harf">
+											<option value="0">请选择优惠券</option>
+										</select>
+										<span class="add-new-coupon">
+											<a href="javascript:;" class="refresh">刷新</a><span class="space">|</span><a href="{:__URL('ADMIN_MAIN/promotion/addcoupontype')}" target="_blank">创建</a>
+										</span>
+									</span>
+								</div>
+								<p class="error" style="padding-left: 140px;"></p>
+							</div>
+						</div>
+						<button class="btn-common-white btn-small add-give-content">添加赠送内容</button>
+					</div>
+				</div>
+				{/notempty}
+			</div>
+			<button class="btn-common-white btn-small add-level">添加层级</button>
+		</dd>
+	</dl>
+	<dl>
+		<dt></dt>
+		<dd>
+			<button class="btn-common btn-big" onclick="save();">保存</button>
+			<button class="btn-common-cancle btn-big" onclick="javascript:history.back(-1);">返回</button>
+		</dd>
+	</dl>
+</div>
+
+<script type="text/html" id="level-container">
+	<div class="level-container">
+		<div class="left-box">
+			<p class="box-title">赠送条件</p>
+			<div>
+				满<input type="number" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">元</em>
+			</div>
+			<p class="error" style="padding-left: 25px;"></p>
+		</div>
+		<div class="right-box">
+			<p class="box-title">赠送内容 <a href="javascript:;" class="del">删除层级</a></p>
+			<div class="give-content-list">
+				<div class="item">
+					<select name="give_type" class="select-common harf">
+						<option value="point">积分</option>
+						<option value="balance">余额</option>
+						<option value="pointratio">按比例赠送积分</option>
+						<option value="balanceratio">按比例赠送余额</option>
+						<option value="coupon">优惠券</option>
+					</select>
+					<div class="give_type">
+						<span data-type="point">
+							<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">分</em>
+						</span>
+						<span data-type="balance" class="hide">
+							<input type="number" name="value" class="input-common harf condition" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')"><em class="unit">元</em>
+						</span>
+						<span data-type="pointratio" class="hide">
+							<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">%</em>
+						</span>
+						<span data-type="balanceratio" class="hide">
+							<input type="number" name="value" class="input-common harf condition" onkeyup="value=value.replace(/[^\d]/g,'')"><em class="unit">%</em>
+						</span>
+						<span data-type="coupon" class="hide">
+							<select name="value" class="select-common harf">
+								<option value="0">请选择优惠券</option>
+							</select>
+							<span class="add-new-coupon">
+								<a href="javascript:;" class="refresh">刷新</a><span class="space">|</span><a href="{:__URL('ADMIN_MAIN/promotion/addcoupontype')}" target="_blank">创建</a>
+							</span>
+						</span>
+					</div>
+					<p class="error" style="padding-left: 140px;"></p>
+				</div>
+			</div>
+			<button class="btn-common-white btn-small add-give-content">添加赠送内容</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="item">
+	<div class="item">
+		<select name="give_type" class="select-common harf">
+			<option value="point">积分</option>
+			<option value="balance">余额</option>
+			<option value="pointratio">按比例赠送积分</option>
+			<option value="balanceratio">按比例赠送余额</option>
+			<option value="coupon">优惠券</option>
+		</select>
+		<div class="give_type">
+			<span data-type="point">
+				<input type="number" name="value" class="input-common harf condition"><em class="unit">分</em>
+			</span>
+			<span data-type="balance" class="hide">
+				<input type="number" name="value" class="input-common harf condition"><em class="unit">元</em>
+			</span>
+			<span data-type="pointratio" class="hide">
+				<input type="number" name="value" class="input-common harf condition"><em class="unit">%</em>
+			</span>
+			<span data-type="balanceratio" class="hide">
+				<input type="number" name="value" class="input-common harf condition"><em class="unit">%</em>
+			</span>
+			<span data-type="coupon" class="hide">
+				<select name="value" class="select-common harf">
+					<option value="0">请选择优惠券</option>
+				</select>
+				<span class="add-new-coupon">
+					<a href="javascript:;" class="refresh">刷新</a><span class="space">|</span><a href="{:__URL('ADMIN_MAIN/promotion/addcoupontype')}" target="_blank">创建</a>
+				</span>
+			</span>
+		</div>
+		<i class="fa fa-trash fa-lg"></i>
+	</div>
+</script>
+{notempty name="$info"}<input type="hidden" id="hide_id" value="{$info.id}">{/notempty}
+{/block}
+
+{block name="script"}
+<script>
+var ADMINMODULE = 'ADMIN_MODULE',
+	URL = '__URL__';
+</script>
+<script type="text/javascript" src="__STATIC__/My97DatePicker/WdatePicker.js"></script>
+<script src="ADMIN_ADDON_JS/addOrEditRecharge.js"></script>
+{/block}

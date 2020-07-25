@@ -1,0 +1,73 @@
+{extend name="$goods_detail_base" /}
+{block name="goods_promotion"}
+<!--限时折扣-->
+{if condition="$goods_detail.promotion_price < $goods_detail.member_price"}
+{assign name="show_price" value="$goods_detail.promotion_price"}
+{else/}
+{assign name="show_price" value="$goods_detail.member_price"}
+{/if}
+<div class="product-discount">
+	<div class="price-info ns-bg-color">
+		<div class="actprice"><i class="yen">¥</i>{if condition="$goods_detail.promotion_price < $goods_detail.member_price"}{$goods_detail.promotion_price}{else/}{$goods_detail.member_price}{/if}</div>
+		<div class="origprice">
+			{if $show_price < $goods_detail['price']}
+			<span class="oprice"><del>¥ {$goods_detail.price}</del></span>
+			{/if}
+			<span class="actual_sale">{$goods_detail['sales']}{if condition ="empty($goods_detail['goods_unit'])"}{:lang('goods_piece')}{else/}{$goods_detail['goods_unit']}{/if}已售</span>
+		</div>
+	</div>
+	
+	<div class="countdown">
+		<div class="txt" data-start="{$goods_detail['promotion_detail']['discount_detail']['start_time']}" data-value="{$goods_detail['promotion_detail']['discount_detail']['end_time']}">
+			{if condition = "$goods_detail['promotion_detail']['discount_detail']['start_time'] > time()"}
+				{:lang('distance_starts')}
+			{else/}
+				{:lang('distance_ends')}
+			{/if}
+			
+		</div>
+		<div class="clockrun">
+			<span class="num" id="day">00</span><span class="dot ns-text-color-gray">:</span>
+			<span class="num" id="hour">00</span><span class="dot ns-text-color-gray">:</span>
+			<span class="num" id="min">00</span><span class="dot ns-text-color-gray">.</span>
+			<span class="num" id="second">00</span>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="goods_price"}{/block}
+
+{block name="goods_action"}
+	{if condition="$goods_detail['state'] == 1"}
+		<div class="left-operation">
+			<a href="{:__URL('APP_MAIN')}">
+				<img src="WAP_IMG/goods/go_home.png"/>
+				<span>{:lang("home_page")}</span>
+			</a>
+			<a href="{$custom_service['value']['service_addr']}">
+				<img src="WAP_IMG/goods/kefux.png"/>
+				<span>{:lang('united_states_customer_service')}</span>
+			</a>
+			<a href="{:__URL('APP_MAIN/goods/cart')}">
+				<img src="WAP_IMG/goods/goods_cart.png"/>
+				<span class="ns-text-color-black">{:lang('goods_cart')}</span>
+				
+				
+				<i class="have-cart-count ns-bg-color label badge circle" {if condition="$cart_count <= 0"}style="display:none"{/if}>{$cart_count}</i>
+				
+				
+			</a>
+		</div>
+
+		<div class="right-operation">
+			{if condition="$goods_detail.is_virtual == 0"}
+			<!--只有普通商品可以加入购物车-->
+			<a href="javascript:;" class="add-to-cart" data-tag="add_cart">{:lang('goods_add_cart')}</a>
+			{/if}
+			<a href="javascript:;" class="buy-now" data-tag="buy_now">{:lang('goods_buy_now')}</a>
+		</div>
+	{else/}
+	<div class="product-sold-out ns-bg-color-gray-shade-50">{:lang('goods_laid_off')}</div>
+	{/if}
+</div>
+{/block}

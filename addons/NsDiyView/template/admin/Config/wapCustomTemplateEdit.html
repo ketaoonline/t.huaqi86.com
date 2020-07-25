@@ -1,0 +1,258 @@
+{extend name="$base" /}
+{block name="resources"}
+<link rel="stylesheet" href="__STATIC__/blue/css/ns_table_style.css" />
+<link rel="stylesheet" href="__STATIC__/blue/css/ns_blue_common.css" />
+<style>
+.table-class tr th, .table-class tr td{padding:10px;}
+.tiphelp-info{margin:0;padding:8px;}
+.js-mask-btn{left:170px !important;right:0px}
+
+</style>
+<link rel="stylesheet" type="text/css" href="__STATIC__/blue/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="__STATIC__/blue/css/ns_blue_common.css" />
+<link rel="stylesheet" type="text/css" href="__STATIC__/blue/css/ns_blue_common_new.css" />
+<link rel="stylesheet" type="text/css" href="__STATIC__/blue/css/ns_table_style.css">
+<link rel="stylesheet" href="ADMIN_CSS/defau.css">
+<link rel="stylesheet" href="ADMIN_CSS/plugin/tooltips.css">
+<link rel="stylesheet" href="ADMIN_CSS/plugin/video-js.css">
+<link rel="stylesheet" href="__STATIC__/wapCustomTemplate/css/custom_template.css">
+<script type="text/javascript" charset="utf-8" src="ADMIN_JS/ueditor/ueditor.config.common.js"></script>
+<script type="text/javascript" charset="utf-8" src="ADMIN_JS/ueditor/ueditor.all.common.js"></script>
+{if $type eq 2}
+<style>
+.custom-template header>h4 {color: #000;}
+</style>
+{/if}
+<style>
+/* 限时折扣 */
+.discount-box{
+	background:#fff;
+	overflow:hidden
+}
+.discount-box .discount-title{
+	padding:10px
+}
+.discount-box .discount-title span:nth-child(1){
+	font-weight: bold;
+	margin-right:10px;
+}
+.discount-box .discount-title span:nth-child(2){
+	color:#4685FD;
+	font-size:12px
+}
+.discount-box .discount-title span em{
+	border-radius: 2px;
+    border: 1px solid #4685FD; 
+    font-style: initial;
+    margin:0px 2px;
+}
+.discount-box .discount-goods{
+	width:93px;
+	margin-left:10px;
+	float:left;
+}
+.discount-box .discount-goods .img-box{
+	width:80px;
+	height:80px;
+	margin:0 auto;
+	
+}
+.discount-box .discount-goods .goods-name{
+	margin-top:10px;
+	font-size: 14px;
+    text-align: center;
+}
+.discount-box .discount-goods .goods-price{
+    text-align: center;
+}
+.discount-box .discount-goods .goods-price span:nth-child(1){
+	font-size: 14px;
+    margin-right:5px;
+    color:#ff6600;
+}
+.discount-box .discount-goods .goods-price span:nth-child(2){
+	font-size: 12px;
+    color: #898989;
+    text-decoration: line-through;
+}
+/* 团购专区  */
+.group-purchase{
+	background:#fff;
+}
+.group-purchase .group-title{
+	padding:10px;
+}
+.group-purchase .group-title span:nth-child(1){
+	font-weight: bold;
+}
+.group-purchase .group-title span:nth-child(2){
+	float:right;
+	color:#4685FD;
+	font-size:12px
+}
+.group-purchase .group-goods{
+	padding:10px;
+	overflow:hidden;
+}
+.group-purchase .group-goods .goods-img{
+	width:80px;
+	height:80px;
+	float:left;
+	margin-right: 10px;
+}
+.group-purchase .group-goods .goods-price span:nth-child(1){
+	font-size:12px;
+	color: #898989;
+    text-decoration: line-through;
+}
+.group-purchase .group-goods .goods-price span:nth-child(2){
+	margin-left:10px;
+	font-size:14px;
+	color:#4685FD;
+}
+.group-purchase .group-goods a{
+	font-size:12px;
+	float:right;
+	padding: 5px;
+    background: #4685fd;
+    color: #fff;
+    border-radius: 3px;
+}
+/* 拼团  */
+.pintuan-box{
+	background:#fff;
+	overflow:hidden
+}
+.pintuan-box .pintuan-title{
+	padding:10px;
+}
+.pintuan-box .pintuan-title span:nth-child(1){
+	font-weight: bold;
+}
+.pintuan-box .pintuan-title span:nth-child(2){
+	float:right;
+	color:#4685FD;
+	font-size:12px
+}
+.pintuan-box .pintuan-goods .goods-box{
+	width:67px;
+	float:left;
+	margin-left:10px;
+}
+.pintuan-box .pintuan-goods .goods-box .goods-img{
+	width:67px;
+	height:67px
+}
+.pintuan-box .pintuan-goods .goods-box span:nth-child(2){
+	text-align:center;
+	display:block;
+	font-size:13px;
+	color:#4685FD;
+	margin-top:5px	
+}
+.pintuan-box .pintuan-goods .goods-box span:nth-child(3){
+	text-align:center;
+	display:block;
+	font-size:13px;
+	color: #898989;
+    text-decoration: line-through;
+    margin-top:1px	
+}
+</style>
+{/block}
+{block name="main"}
+<div class="mb10"></div>
+<!-- <article class="custom-resolution"> -->
+<!-- 	<button class="btn-common" data-width="320">320*0</button> -->
+<!-- 	<button class="btn-common" data-width="375">375*0</button> -->
+<!-- 	<button class="btn-common" data-width="425">425*0</button> -->
+<!-- 	<button class="btn-common" data-width="768">768*0</button> -->
+<!-- 	<button class="btn-common" data-width="1024">1024*0</button> -->
+<!-- </article> -->
+<article class="custom-template">
+	<header data-custom-flag="CustomTemplateName">
+		{if $type eq 2}
+		<img src="__STATIC__/wapCustomTemplate/images/applet_titlebar.png" />
+		{else/}
+		<img src="__STATIC__/wapCustomTemplate/images/titlebar.png" />
+		{/if}
+		<h4 title="{$template_name}" data-custom-template-name="{$template_name}">{$template_name}</h4>
+	</header>
+	<div class="custom-main">
+
+	</div>
+	<div class="caret-up"></div>
+	<div class="plug-in">
+		<h4>添加内容</h4>
+		<ul>
+			<li data-control-name="GoodsSearch" data-class-name="control-search draggable-element">商品搜索</li>
+			<li data-control-name="GoodsList" data-class-name="control-goods-list draggable-element">商品列表</li>
+			<li data-control-name="Title" data-class-name="control-title draggable-element">标题</li>
+			<li data-control-name="TextNavigation" data-class-name="control-text-navigation draggable-element">文本导航</li>
+			<li data-control-name="Notice" data-class-name="control-notice draggable-element">公告</li>
+			<li data-control-name="ImgAd" data-class-name="control-img-ad carousel draggable-element" data-additional-attr="id='carouselImgAd'">图片广告</li>
+			<li data-control-name="NavHyBrid" data-class-name="control-nav-img draggable-element">图文导航</li>
+			{if $type neq 2}
+			<li data-control-name="GoodsClassify" data-class-name="control-goods-classify draggable-element">商品分类</li>
+			{/if}
+			<!-- <li data-control-name="Footer" data-class-name="control-footer draggable-element">底部菜单</li> -->
+			<!-- 用户可以自己写代码，右侧出来一个富文本编辑器  -->
+			<li data-control-name="RichText" data-class-name="control-rich-text draggable-element">富文本</li>
+			{if $type neq 2}
+			<li data-control-name="CustomModule" data-class-name="control-custom-module draggable-element">自定义模块</li>
+			{/if}
+			<li data-control-name="AuxiliaryLine" data-class-name="control-auxiliary-line draggable-element">辅助线</li>
+			<li data-control-name="AuxiliaryBlank" data-class-name="control-auxiliary-blank draggable-element">辅助空白</li>
+			<li data-control-name="Coupons" data-class-name="control-coupons draggable-element">优惠券</li>
+			<li data-control-name="Video" data-class-name="control-video draggable-element">视频</li>
+<!-- 			<li data-control-name="Audio" data-class-name="control-audio draggable-element">音频</li> -->
+			<li data-control-name="ShowCase" data-class-name="control-show-case draggable-element">橱窗</li>
+			{if condition="$type == 2"}
+			<li data-control-name="Live" data-class-name="control-live draggable-element">直播</li>
+			{/if}
+			<li data-control-name="Discount" data-class-name="control-discount draggable-element">限时折扣</li>
+			{if condition="addon_is_exit('NsGroupBuy')"}
+			<li data-control-name="GroupPurchase" data-class-name="control-groupPurchase draggable-element">团购专区</li>
+			{/if}
+			{if condition="addon_is_exit('NsPintuan')"}
+			<li data-control-name="Pintuan" data-class-name="control-pintuan draggable-element">拼团专区</li>
+			{/if}
+		</ul>
+	</div>
+	<div style="text-align:center;padding:10px;">
+		<input type="hidden" value="{$id}" id="hidden_id" />
+		<button class="btn-common btn-big js-save" >保存</button>
+		<button class="btn-common-cancle btn-big" onclick="javascript:history.back(-1);" >返回</button>
+	</div>
+</article>
+<div class="js-mask-btn" style="display:none;position: fixed; bottom: 0; left: 0; z-index: 10000; width: 100%; margin: 0;background-color: rgba(204, 204, 204, 0.701961);text-align: center;">
+	<button class="btn-common btn-big js-save" style="margin: 12px auto !important;transform: translate(-50%,0%);">保存</button>
+</div>
+{notempty name='$type'}
+<input type="hidden" id="type" value="{$type}">
+{else/}
+<input type="hidden" id="type" value="1">
+{/notempty}
+{/block}
+{block name="script"}
+<script>
+var goods_category_list = eval('{$goods_category_list}');//商品分类
+var template_name = "{$template_name}";
+var template_data = eval({$template_data});//组件数据
+var template_list = eval({$template_list});//链接地址
+var coupon_type_list = eval({$coupon_type_list});//优惠券集合
+var nav_list = eval({$nav_list});//链接导航
+var URL = "__URL__";
+var ADMINMODULE = "ADMIN_MODULE";
+</script>
+
+<!-- 插件 -->
+<script src="ADMIN_JS/plugin/drag-arrange.js"></script>
+<script src=ADMIN_JS/plugin/jquery.pure.tooltips.js></script>
+<!-- IE8 video.js -->
+<script src="ADMIN_JS/plugin/videojs-ie8.min.js"></script>
+<script src="ADMIN_JS/plugin/video.min.js"></script>
+<script src="__STATIC__/js/ajax_file_upload.js" type="text/javascript"></script>
+<script src="__STATIC__/js/file_upload.js" type="text/javascript"></script>
+<script src="__STATIC__/wapCustomTemplate/js/custom_template.js"></script>
+{/block}

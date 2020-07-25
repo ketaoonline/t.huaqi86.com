@@ -1,0 +1,99 @@
+{extend name="$base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/member_detail.css" />
+{/block}
+{block name="main"}
+<div class="set-style">
+    <dl>
+        <dt>直播间名称：</dt>
+        <dd>
+            {if condition="$data['room_name']"}{$data['room_name']}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>擅长类目：</dt>
+        <dd>
+            {if condition="$data['category_zh']"}{$data['category_zh']}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>申请状态：</dt>
+        <dd>
+            {if condition="$data['status']"}{$status_maps[$data['status']]}{else /}--{/if}
+        </dd>
+    </dl>
+    {if condition="$data['status'] == 3 && $data['refuse_reason']"}
+    <dl>
+        <dt>拒绝原因：</dt>
+        <dd>
+            {$data['refuse_reason']}
+        </dd>
+    </dl>
+    {/if}
+    <dl>
+        <dt>直播间介绍：</dt>
+        <dd>
+            {if condition="$data['room_desc']"}
+            {$data['room_desc']}
+            {else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>封面图片：</dt>
+        <dd>
+            <div class="member-img">
+                {if condition="$data['cover_img']"}
+                <img src="{:__IMG($data['cover_img'])}">
+                {else /}
+                暂无
+                {/if}
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>分享卡片图片：</dt>
+        <dd>
+            <div class="member-img">
+                {if condition="$data['share_img']"}
+                <img src="{:__IMG($data['share_img'])}">
+                {else /}
+                暂无
+                {/if}
+
+            </div>
+        </dd>
+    </dl>
+    <h4><span></span>商品列表</h4>
+    <table class="table-class">
+        <colgroup>
+            <col style="width: 2%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 10%;">
+        </colgroup>
+        <thead>
+        <tr align="center">
+            <th></th>
+            <th>ID</th>
+            <th>商品名称</th>
+            <th>价格</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {notempty name="$data['goog_list']"}
+        {foreach name="$data['goog_list']" id="vo"}
+        <tr align="center">
+            <td></td>
+            <td>{$vo['goods_id']}</td>
+            <td>{$vo['goods_name']}</td>
+            <td>{$vo['price']}</td>
+        </tr>
+        {/foreach}
+        {else /}
+        <tr align="center"><td colspan="5">暂无数据记录</td></tr>
+        {/notempty}
+        </tbody>
+    </table>
+</div>
+{/block}

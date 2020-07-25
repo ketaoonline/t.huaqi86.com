@@ -1,0 +1,75 @@
+{extend name="$base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/member_detail.css" />
+{/block}
+{block name="main"}
+<div class="set-style">
+    <dl>
+        <dt>会员头像：</dt>
+        <dd>
+            <div class="member-img">
+                {if condition="$data['user']['user_headimg']"}
+                <img src="{:__IMG($data['user']['user_headimg'])}">
+                {else /}
+                <img src="{:__IMG($default_headimg)}">
+                {/if}
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>真实姓名：</dt>
+        <dd>
+            {if condition="$data['true_name']"}{$data['true_name']}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>昵称：</dt>
+        <dd>
+            {if condition="$data['user']['nick_name']"}
+            {$data['user']['nick_name']}
+            {else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>手机号：</dt>
+        <dd>
+            {if condition="$data['mobile']"}
+            {$data['mobile']}
+            {else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>身份证号：</dt>
+        <dd>
+            {if condition="$data['identity_card']"}
+            {$data['identity_card']}
+            {else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>身份证正面：</dt>
+        <dd>
+            <div class="member-img">
+                {if condition="$data['identity_card_front']"}
+                <img src="{:__IMG($data['identity_card_front'])}">
+                {else /}
+                暂无
+                {/if}
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>身份证反面：</dt>
+        <dd>
+            <div class="member-img">
+                {if condition="$data['identity_card_back']"}
+                <img src="{:__IMG($data['identity_card_back'])}">
+                {else /}
+                暂无
+                {/if}
+
+            </div>
+        </dd>
+    </dl>
+</div>
+{/block}

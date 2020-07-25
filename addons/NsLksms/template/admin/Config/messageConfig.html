@@ -1,0 +1,76 @@
+{extend name="$base" /}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>是否开启：</dt>
+		<dd >
+			<input id="sms_is_use" type="checkbox" class="checkbox" {if condition="$mobile_message.is_use=='1'"}checked="checked"{/if}/>
+			<p class="hint" style="margin-top:10px;">当前使用凌凯短信配置</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>企业号：</dt>
+		<dd>
+			<input id="app_key" type="text" value="{$mobile_message['value']['appKey']}" class="input-common long" />
+        </dd>
+	</dl>
+	<dl>
+		<dt>密码：</dt>
+		<dd>
+			<input id="secret_key" type="text" value="{$mobile_message['value']['secretKey']}" class="input-common long" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>短信签名：</dt>
+		<dd>
+			<input id="free_sign_name" type="text" value="{$mobile_message['value']['freeSignName']}" class="input-common long" />
+		</dd>
+	</dl>
+	<dl>
+		<dt></dt>
+		<dd>
+			<button class="btn-common btn-big" onclick="setConfigAjax();" >保存</button>
+			<button class="btn-common-cancle btn-big" onclick="javascript:history.back(-1);" >返回</button>
+		</dd>
+	</dl>
+</div>
+<script>
+$("#sms_is_use").click(function(){
+	if($("#sms_is_use").prop("checked")){
+		$(".showmessage").toggle();
+	}else{
+		$(".showmessage").toggle();
+	}
+})
+
+function setConfigAjax(){
+	var is_use = 0;
+	if($("#sms_is_use").is(':checked')){
+		var is_use = 1;
+	}
+	var app_key = $("#app_key").val();
+	var secret_key = $("#secret_key").val();
+	var free_sign_name = $("#free_sign_name").val();
+	$.ajax({
+		type:"post",
+		url:"{:__URL('__URL__/NsLksms/ADMIN_MODULE/config/lingkaiConfig')}",
+		data:{
+			'is_use':is_use,
+			'app_key':app_key,
+			'secret_key':secret_key,
+			'free_sign_name':free_sign_name,
+		},
+		success:function (data) {
+			if (data["code"] > 0) {
+				showTip(data["message"],'success');
+				location.href=__URL("ADMIN_MAIN/config/smsconfig");
+			}else{
+				showTip(data["message"],'error');
+			}
+		}
+	});
+}
+</script>
+{/block}

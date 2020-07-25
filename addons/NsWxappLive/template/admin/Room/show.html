@@ -1,0 +1,84 @@
+{extend name="$base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/member_detail.css" />
+{/block}
+{block name="main"}
+<div class="set-style">
+    <dl>
+        <dt>房间号：</dt>
+        <dd>
+            {if condition="$data['room_id']"}{$data['room_id']}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>直播间名称：</dt>
+        <dd>
+            {if condition="$data['name']"}{$data['name']}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>主播：</dt>
+        <dd>
+            <img width="50" src="{$data['anchor_img']}"> {if condition="$data['anchor_name']"}{$data['anchor_name']}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>开播时间：</dt>
+        <dd>
+            {if condition="$data['start_time']"}{$data['start_time']|date="Y-m-d H:i:s", ###}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>结束时间：</dt>
+        <dd>
+            {if condition="$data['end_time']"}{$data['end_time']|date="Y-m-d H:i:s", ###}{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>封面图片：</dt>
+        <dd>
+            {if condition="$data['cover_img']"}<image width="100" src="{$data['cover_img']}"/>{else /}--{/if}
+        </dd>
+    </dl>
+    <dl>
+        <dt>分享图片：</dt>
+        <dd>
+            {if condition="$data['share_img']"}<image width="100" src="{$data['share_img']}"/>{else /}--{/if}
+        </dd>
+    </dl>
+    <h4><span></span>商品列表</h4>
+    <table class="table-class">
+        <colgroup>
+            <col style="width: 2%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+        </colgroup>
+        <thead>
+        <tr align="center">
+            <th></th>
+            <th>商品图</th>
+            <th>商品名称</th>
+            <th>价格</th>
+            <th>商品地址</th>
+        </tr>
+        </thead>
+        <tbody>
+        {notempty name="$data['goods']"}
+            {foreach name="$data['goods']" id="vo"}
+            <tr align="center">
+                <td></td>
+                <td><img width="100" src="{$vo['cover_img']}"></td>
+                <td>{$vo['name']}</td>
+                <td>{:round($vo['price'], 2)}元</td>
+                <td title="{$vo['url']}">{$vo['url']|mb_substr=0,20}...</td>
+            </tr>
+            {/foreach}
+        {else /}
+            <tr align="center"><td colspan="5">暂无数据记录</td></tr>
+        {/notempty}
+        </tbody>
+    </table>
+</div>
+{/block}

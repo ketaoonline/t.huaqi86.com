@@ -1,0 +1,198 @@
+{extend name="$base" /}
+{block name="resources"}
+<style>
+    .ns-main{margin-top:0px;}
+    .modal-div{width:90%;margin:auto}
+    .modal-dl{overflow:hidden}
+    .modal-dl dt{line-height:33px;float:left;font-weight:400}
+    .modal-dl dd{float:left}
+    .modal-dl dd span{display:block;color:#de533c}
+</style>
+{/block}
+{block name="main"}
+<table class="mytable">
+    <tr>
+        <td>
+            <select id="select-apply-status" class="select-common">
+                <option value="all">全部状态</option>
+                <option value="1">申请中</option>
+                <option value="2">申请通过</option>
+                <option value="3">申请拒绝</option>
+            </select>
+            <input type="text" id='search-text' placeholder="请输入关键词" class="input-common" />
+            <input type="button" class="btn-common" onclick="searchData()" value="搜索" />
+        </td>
+    </tr>
+</table>
+<table class="table-class">
+    <colgroup>
+        <col style="width: 2%;">
+        <col style="width: 15%;">
+        <col style="width: 10%;">
+        <col style="width: 15%;">
+        <col style="width: 15%;">
+        <col style="width: 13%;">
+        <col style="width: 15%;">
+    </colgroup>
+    <thead>
+    <tr align="center">
+        <th></th>
+        <th>ID</th>
+        <th align="left">直播间名称</th>
+        <th>开播时间</th>
+        <th>微信号</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div class="modal fade hide" id="forbiddenApply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">拒绝原因</h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-div">
+                    <input type="hidden" id="apply-id" value=""/>
+                    <input type="hidden" id="apply-status" value=""/>
+                    <dl class="modal-dl">
+                        <dt>原因:</dt>
+                        <dd>
+                            <input  type="text" id="refuse-reason" value=""/>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="up_id"/>
+                <input type="hidden" id="no_arr" value=""/>
+                <button type="button" class="btn-common btn-big" onclick="forbiddenApply();">修改</button>
+                <button type="button" class="btn-common-cancle btn-big" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    function LoadingInfo(page_index) {
+        var keyword = $("#search-text").val();
+        var apply_status = $("#select-apply-status").val();
+        $.ajax({
+            type : "post",
+            url : "{:__URL('__URL__/NsWxappLive/ADMIN_MODULE/apply/index')}",
+            data : {"page_index" : page_index, "page_size" : $("#showNumber").val(), "keyword" : keyword, "status": apply_status},
+            success : function(data) {
+                if (data["data"].length > 0) {
+                    $(".table-class tbody").empty();
+                    for (var i = 0; i < data["data"].length; i++) {
+                        var html = '';
+                        html += '<tr align="center">';
+                        html += '<td></td>'
+                        html += '<td>' + data['data'][i]['id'] +'</td>';
+                        html += '<td align="left">' + data["data"][i]["room_name"] + '</td>';
+                        html += '<td>' + data["data"][i]["start_time"] + '</td>';
+                        html += '<td>' + data["data"][i]["wechat_id"] + '</td>';
+                        switch (data['data'][i]['status']) {
+                            case 1:
+                                html += '<td>申请中</td>';
+                                html += '<td><a href="javascript:void(0);" onclick="changeStatus(' + data['data'][i]['id'] + ',2)">通过</a><a href="javascript:void(0);" onclick="showForbiddenApply(' + data['data'][i]['id'] + ',3)">拒绝</a><a href="' + __URL("__URL__/NsWxappLive/ADMIN_MODULE/apply/show?id="+data['data'][i]['id']) + '">详情</a></td>';
+                                break;
+                            case 2:
+                                html += '<td>申请通过</td>';
+                                html += '<td><a href="' + __URL("__URL__/NsWxappLive/ADMIN_MODULE/apply/show?id="+data['data'][i]['id']) + '">详情</a></td>';
+                                break;
+                            case 3:
+                                html += '<td>申请拒绝</td>';
+                                html += '<td><a href="javascript:void(0);" onclick="changeStatus(' + data['data'][i]['id'] + ',2)">通过</a><a href="' + __URL("__URL__/NsWxappLive/ADMIN_MODULE/apply/show?id="+data['data'][i]['id']) + '">详情</a></td>';
+                                break;
+                        }
+
+                        html += '</tr>';
+                        $(".table-class tbody").append(html);
+                    }
+                } else {
+                    var html = '<tr align="center"><td colspan="8">暂无符合条件的数据记录</td></tr>';
+                    $(".table-class tbody").html(html);
+                }
+                initPageData(data["page_count"],data['data'].length,data['total_count']);
+                $("#pageNumber").html(pagenumShow(jumpNumber,$("#page_count").val(),{$pageshow}));
+            }
+        });
+    }
+
+    function changeStatus(id, status) {
+        $("#dialog").dialog({
+            buttons:
+            {
+                "确定,#0059d6,#fff": function() {
+                    $(this).dialog('close');
+                    $.ajax({
+                        type : "post",
+                        url : "{:__URL('__URL__/NsWxappLive/ADMIN_MODULE/apply/modifyApplyStatus')}",
+                        data : {'id' : id, 'status' : status},
+                        success : function(data) {
+                            if(data["code"] > 0 ){
+                                showTip(data["message"],'success');
+                                window.location.reload();
+                            }else{
+                                showTip(data["message"],'error');
+                            }
+                        }
+                    })
+                }
+            },
+            contentText:"确定要修改状态吗",
+            title:"消息提醒"
+        });
+    }
+
+    function showForbiddenApply(id, status) {
+        $("#apply-id").val(id);
+        $("#apply-status").val(status);
+        $("#forbiddenApply").modal('show');
+    }
+
+    function forbiddenApply() {
+        var id = $("#apply-id").val();
+        var status = $("#apply-status").val();
+        var refuse_reason = $("#refuse-reason").val();
+        if (refuse_reason == '') {
+            showMessage('error', "拒绝原因不能为空！");
+            return false;
+        }
+        $("#dialog").dialog({
+            buttons:
+                {
+                    "确定,#0059d6,#fff": function() {
+                        $(this).dialog('close');
+                        $.ajax({
+                            type : "post",
+                            url : "{:__URL('__URL__/NsWxappLive/ADMIN_MODULE/user/modifyUserStatus')}",
+                            data : {'id' : id, 'status' : status, 'refuse_reason' : refuse_reason},
+                            success : function(data) {
+                                if(data["code"] > 0 ){
+                                    showTip(data["message"],'success');
+                                    window.location.reload();
+                                }else{
+                                    showTip(data["message"],'error');
+                                }
+                            }
+                        })
+                    }
+                },
+            contentText:"确定要修改状态吗",
+            title:"消息提醒"
+        });
+    }
+
+    function searchData(){
+        LoadingInfo(1);
+    }
+</script>
+{/block}

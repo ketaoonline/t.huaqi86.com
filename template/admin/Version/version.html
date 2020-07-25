@@ -1,0 +1,212 @@
+{extend name="$base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/upgrade/upgrade_view.css" media="screen">
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/upgrade/loading.css" media="screen">
+{/block}
+{block name="main"}
+
+<div class="space-10"></div>
+    <div class="up-view"  style="display:none;">
+      	<div class="alert alert-warning">警告！本地如果存在二次开发不建议直接使用一键升级,可以使用一键下载,自行比对升级。</div>
+        <div class="mod-table" style="margin-top:10px;">
+            <div class="table-div">
+                <table>
+                    <tbody>
+                    <tr><td class="back-f5f5f5">升级信息</td></tr>
+                    <tr>
+                        <td>当前版本号：
+                            <span class="right">
+                                {$version}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>升级版本号：
+                            <span class="right version-no">
+                                {$version_info.sys_version_no}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>升级版本序列号：
+                            <span class="right version-release">
+                                {$version_info.sys_release}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>需更新版本数：
+                            <span class="right script-count">
+                                {$version_info.script_count}
+                            </span>
+                            <div class="pull-right"><a href="javascript:showScript();">点击查看</a></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>需更新文件数：
+                            <span class="right file-count">
+                                {$version_info.file_count}
+                            </span>
+                            <div class="pull-right"><a href="javascript:showFile();">点击查看</a></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="alert alert-danger alert-dismissable version-error-block" style="margin-top:10px;display:none;">
+            <button type="button" class="close" data-dismiss="alert"
+                    aria-hidden="true">
+                &times;
+            </button>
+            <div class="version-error"></div>
+        </div>
+        <div class="up-footer">
+            <button class="up-btn" onclick="downloadFile()">下载文件</button>
+            <button class="up-btn" onclick="upgradeAction();">一键升级</button>
+        </div>
+
+    </div>
+
+    <div class="loading-block">
+        <div id="loading">
+            <div id="loading-center">
+                <div id="loading-center-absolute">
+                    <div class="object" id="object_one"></div>
+                    <div class="object" id="object_two"></div>
+                    <div class="object" id="object_three"></div>
+                    <div class="object" id="object_four"></div>
+                    <div class="object" id="object_five"></div>
+                    <div class="object" id="object_six"></div>
+                    <div class="object" id="object_seven"></div>
+                    <div class="object" id="object_eight"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}
+{block name="script"}
+<div class="modal fade hide" id="show_script" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:400px;margin-left:-200px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>需更新版本</h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-infp-style" style="margin:auto;">
+                    <table class="modal-tab script-table" style="width: 100%;">
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-common" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hide" id="show_file" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:900px;margin-left:-450px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>需更新文件</h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-infp-style" style="margin:auto;">
+                    <table class="modal-tab file-table" style="width: 100%;">
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-common" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var up_data = {};
+//检测新版本
+function checkUp(){
+    $.ajax({
+        type:'post',
+        url : "{:__URL('ADMIN_MAIN/version/checkUpgrade')}",
+        data:{last_version_release:"{$last_version_release}"},
+        success:function(res){
+            if(res['code'] >= 0){
+                up_data = res.data;
+                $(".version-no").text(up_data.sys_version_no);
+                $(".version-release").text(up_data.sys_release);
+                $(".script-count").text(up_data.script_count);
+                $(".file-count").text(up_data.file_count);
+                var script_html = "";
+                if(up_data.scripts.length > 0){
+                    $.each(up_data.scripts, function(name, value) {
+                        script_html += '<tr><td>'+value+'</td></tr>';
+                    });
+                }else{
+                    script_html = '<tr><td>暂无可更新版本</td></tr>';
+                }
+
+                $(".script-table").html(script_html);
+                var file_html = "";
+                if(up_data.files.length > 0) {
+                    $.each(up_data.files, function (name, value) {
+                        file_html += '<tr><td>' + value + '</td></tr>';
+                    });
+                }else{
+                    file_html += '<tr><td>暂无可更新文件</td></tr>';
+                }
+                $(".file-table").html(file_html);
+                if(up_data.error.length > 0){
+                    var error_html = "";
+                    $.each(up_data.error, function (name, value) {
+                        error_html += '<p><b>' + value + '</b>&nbsp;没有可写权限</p>';
+                    });
+                    $(".version-error").html(error_html);
+                    $(".version-error-block").show();
+                    $(".up-footer button").addClass("btn-disabled")
+                    $(".up-footer button").prop("disabled", true);
+                }
+                $(".loading-block").hide();
+                $(".up-view").show();
+            }else{
+                $(".loading-block").hide();
+                $(".table-div tbody").html("<td class='version-empty'>"+res['data']+"</td>");
+              	$(".up-footer").hide();
+                $(".up-view").show();
+                showMessage('error',data['data']);
+            }
+        }
+    })
+}
+
+/**
+ * 查看版本记录
+ */
+function showScript(){
+    $("#show_script").modal("show");
+}
+/**
+ * 查看版本记录
+ */
+function showFile(){
+    $("#show_file").modal("show");
+}
+//升级操作
+function upgradeAction(){
+    location.href = "{:__URL('ADMIN_MAIN/version/upgradeAction')}";
+}
+//下载文件
+function downloadFile() {
+    location.href = "{:__URL('ADMIN_MAIN/version/downloadAction')}";
+}
+
+checkUp();
+</script>
+{/block}

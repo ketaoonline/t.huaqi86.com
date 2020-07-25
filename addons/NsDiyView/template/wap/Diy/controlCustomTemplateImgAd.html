@@ -1,0 +1,46 @@
+<!-- 图片广告 -->
+
+{if condition="!empty($custom_template_v['control_data']['img_ad'])"}
+	<div style="padding: 0px 10px;background: #fff;">	
+		{if condition="$custom_template_v['control_data']['img_ad'][0]['adv_show_type'] eq 1"}
+		<div class="contro-slick{$K}">
+			<div 
+			{notempty name="$custom_template_v.control_data['img_ad'][0]['href']['template_url']"}
+				{if is_url($custom_template_v.control_data['img_ad'][0]['href']['template_url'])}
+				onclick="location.href='{$custom_template_v.control_data['img_ad'][0]['href']['template_url']}'"
+				{else/}
+				onclick="location.href='{:__URL('APP_MAIN'.$custom_template_v.control_data['img_ad'][0]['href']['template_url'])}'"
+				{/if}
+			{else/}
+				onclick="location.href='javascript:;'"
+			{/notempty}
+			
+			>
+				<img src="{:__IMG($custom_template_v.control_data['img_ad'][0]['src'])}" alt="{:lang('display_advertising')}" style="max-width:100%;display: inline-block !important;vertical-align: middle !important;">
+			</div>
+		</div>
+		{else /}
+		<div class="swiper-container">
+	        <div class="swiper-wrapper">
+	        {foreach name="custom_template_v.control_data['img_ad']" item="img_id_v"}
+	            <div class="swiper-slide">
+	                <a 
+	                {notempty name="$img_id_v['href']['template_url']"}
+	               	 {if is_url($img_id_v['href']['template_url'])}
+	               		 href="{$img_id_v['href']['template_url']}"
+	               	 {else/}
+	               		 href="{:__URL('APP_MAIN'.$img_id_v['href']['template_url'])}"
+	               	 {/if}
+	                {else/}
+	                href="javascript:;"
+	                {/notempty}
+	                >
+	                    <img src="{:__IMG($img_id_v['src'])}" alt="{:lang('display_advertising')}">
+	                </a>
+	            </div>
+	        {/foreach}
+	        </div>
+	    </div>
+		{/if}
+	</div>
+{/if}

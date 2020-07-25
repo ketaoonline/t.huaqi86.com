@@ -1,0 +1,239 @@
+{extend name="admin/base" /}
+{block name="resources"}
+<style type="text/css">
+.clearfix:after {
+content: ".";
+display: block;
+height: 0;
+font-size: 0;
+clear: both;
+visibility: hidden;
+}
+.help-inline {
+    padding-top: 5px;
+}
+.set-style dl dt{width:10%;}
+.muted {
+	font-weight:normal;
+	font-size:12px
+}
+.diy-passicon{
+	    padding: 10px;
+    text-align: center;
+    line-height:40px;
+    width: 200px;
+	float:left;
+}
+.pass-icon{width: 40px;line-height: 50px;}
+.diy-passicon img{max-width:35px;}
+.content-top{padding:20px;}
+.content-top a{color: rgba(0,0,0,.6);}
+/**
+ * 
+ */
+.diy-content{position: relative;}
+.block-diy{width: 20%;box-sizing: border-box;padding: 0 7.5px;margin-top: 15px;z-index: 1;}
+.block-diy  .diy-content{padding: 15px 10px 15px 15px;margin-bottom: 0;color: #5e6166;font-size: 12px;background-color: #f5f7fa;overflow: hidden;z-index: 1;display: flex;cursor: pointer;}
+.block-diy  .diy-content .diy-icon{flex: none;height: 40px;width: 40px;line-height:42px;position: relative;}
+.block-diy  .diy-content .diy-info{margin-left: 10px;}
+.block-diy  .diy-content .diy-info .diy-title{height: 24px;line-height: 25px;margin: 0;font-size: 14px;font-weight: bold;color: #5e6166;}
+.block-diy  .diy-content .diy-info .diy-desc{color: #aaa;font-size: 12px;font-weight: 400;margin: 0;height: 23px;line-height: 23px;overflow: hidden;text-overflow: ellipsis;}
+.block-diy .diy-content{transition: all .3s;}
+.block-diy .diy-content:hover{box-shadow: 0 2px 5px 0 rgba(2,31,65,.1)}
+.flex-wrap{width: 100%;display: flex;flex-wrap: wrap;margin: -5px auto 0px;}
+/* .diy-icon img {width: 100%;} */
+
+
+</style>
+{/block}
+{block name="main"}
+<div class="set-style">
+	<h4><span></span>微信小程序使用流程</h4>
+	<div class="diy-content">
+		<div class="content-top clearfix">
+			<a href="https://mp.weixin.qq.com" target="__blank">
+				<div class="diy-passicon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process01.png" alt="" />
+					<p class="diy-title">注册微信小程序应用</p>
+				</div>
+			</a>
+			<div class="diy-passicon pass-icon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process02.png" alt="" />
+			</div>
+			<a href="https://mp.weixin.qq.com" target="__blank">
+				<div class="diy-passicon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process03.png" alt="" />
+					<p class="diy-title">完善微信小程序信息</p>
+				</div>
+			</a>
+			<div class="diy-passicon pass-icon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process02.png" alt="" />
+			</div>
+			<a href="{:__URL('ADMIN_MAIN/wchat/appletRelease')}" target="__blank">
+				<div class="diy-passicon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process04.png" alt="" />
+					<p class="diy-title">下载uniapp源码</p>
+				</div>
+			</a>
+			<div class="diy-passicon pass-icon">
+				<img src="ADMIN_IMG/wxMenu/wchat-icon-process02.png" alt="" />
+			</div>
+			<a href="javascript:;">
+				<div class="diy-passicon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process05.png" alt="" />
+					<p class="diy-title">源码上传到微信小程序</p>
+				</div>
+			</a>
+			<div class="diy-passicon pass-icon">
+				<img src="ADMIN_IMG/wxMenu/wchat-icon-process02.png" alt="" />
+			</div>
+			<a href="javascript:;">
+				<div class="diy-passicon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process06.png" alt="" />
+					<p class="diy-title">微信小程序后台提交源码</p>
+				</div>
+			</a>
+			<div class="diy-passicon pass-icon">
+				<img src="ADMIN_IMG/wxMenu/wchat-icon-process02.png" alt="" />
+			</div>
+			<a href="javascript:;">
+				<div class="diy-passicon">
+					<img src="ADMIN_IMG/wxMenu/wchat-icon-process07.png" alt="" />
+					<p class="diy-title">微信小程序后台发布源码</p>
+				</div>
+			</a>
+	</div>
+	<h4><span></span>微信小程序入口</h4>
+	<div class="flex-wrap">
+		
+		<a class="block-diy" title="微信小程序配置" href = '{:__URL('ADMIN_MAIN/wchat/appletConfig')}'>
+			<div class="diy-content">
+				<div class="diy-icon">
+					<img src="ADMIN_IMG/wxMenu/diy-uniapp-icon-config.png" alt="" />
+				</div>
+				<div class="diy-info">
+					<p class="diy-title">微信小程序配置</p>
+					<p class="diy-desc">小程序appid、app秘钥等配置</p>
+				</div>
+			</div>
+		</a>
+		<a class="block-diy" title="uniapp源码下载" href = '{:__URL('ADMIN_MAIN/wchat/appletRelease')}'>
+			<div class="diy-content">
+				{if condition="$applet_list.is_set == 0"}
+				<div style="position: absolute;top: 0;right: 0;"><img src="ADMIN_IMG/wxMenu/applet-icon.png"/></div>
+				{/if}
+				<div class="diy-icon">
+					<img src="ADMIN_IMG/wxMenu/diy-uniapp-icon-down.png" alt="" />
+				</div>
+				<div class="diy-info">
+					<p class="diy-title">小程序源码下载</p>
+					<p class="diy-desc">下载uniapp小程序源码</p>
+				</div>
+			</div>
+		</a>
+	
+	</div>
+	<h4><span></span>小程序端装修</h4>
+	<div class="flex-wrap">
+		<a class="block-diy" title="首页导航" href = '{:__URL('ADMIN_MAIN/config/shopNavigationList?nav_type=3')}'>
+			<div class="diy-content">
+				<div class="diy-icon">
+					<img src="ADMIN_IMG/diy-wap-icon-nav.png" alt="" />
+				</div>
+				<div class="diy-info">
+					<p class="diy-title">首页导航</p>
+					<p class="diy-desc">设置小程序端中部导航菜单</p>
+				</div>
+			</div>
+		</a>
+		<a class="block-diy" title="分类显示" href="{:__URL('ADMIN_MAIN/config/appletcategorydisplay')}">
+			<div class="diy-content">
+				<div class="diy-icon">
+					<img src="ADMIN_IMG/diy-wap-icon-type.png" alt="" />
+				</div>
+				<div class="diy-info">
+					<p class="diy-title">分类显示</p>
+					<p class="diy-desc">设置小程序端</p>
+				</div>
+			</div>
+		</a>
+		<a class="block-diy" title="广告管理" href="{:__URL('ADMIN_MAIN/system/shopadvpositionlist?terminal=3')}">
+			<div class="diy-content">
+				<div class="diy-icon">
+					<img src="ADMIN_IMG/diy-wap-icon-adv.png" alt="" />
+				</div>
+				<div class="diy-info">
+					<p class="diy-title">广告管理</p>
+					<p class="diy-desc">设置小程序端广告页面</p>
+				</div>
+			</div>
+		</a>
+		{if condition="addon_is_exit('NsDiyView') == 1"}
+		<a class="block-diy" title="微页面" href='{:__URL('__URL__/NsDiyView/ADMIN_MODULE/config/wapcustomTemplateList?type=2')}'>
+			<div class="diy-content">
+				<div class="diy-icon">
+					<img  src="ADMIN_IMG/diy-wap-icon-customize.png" alt="" />
+				</div>
+				<div class="diy-info">
+					<p class="diy-title">微页面</p>
+					<p class="diy-desc">小程序首页模板自定义设置</p>
+				</div>
+			</div>
+		</a>
+		{/if}
+		
+		<a class="block-diy" title="设置浮层" href='{:__URL('ADMIN_MAIN/config/appletFloat')}'>
+		<div class="diy-content">
+			<div class="diy-icon">
+				<img  src="ADMIN_IMG/diy-wap-icon-wapFloat.png" alt="" />
+			</div>
+			<div class="diy-info">
+				<p class="diy-title">首页浮层</p>
+				<p class="diy-desc">小程序端首页浮层设置</p>
+			</div>
+		</div>
+		</a>
+		
+		
+	</div>
+	<h4><span></span>小程序插件</h4>
+	{if condition="addon_is_exit('NsWxappLive') == 1"}
+	<div class="flex-wrap">
+		<a class="block-diy" title="小程序直播" href = '{:__URL('__URL__/NsWxappLive/admin/room/index')}'>
+		<div class="diy-content">
+			<div class="diy-icon">
+				<img src="__ADDONS__/NsWxappLive/ico.png" alt="" />
+			</div>
+			<div class="diy-info">
+				<p class="diy-title">小程序直播</p>
+				<p class="diy-desc">小程序直播</p>
+			</div>
+		</div>
+		</a>
+	</div>
+	{/if}
+	
+</div>
+<script>
+
+
+function save() {
+	var appid = $("#appid").val();
+	var appsecret = $("#appsecret").val();
+	if(appid.length < 100 && appsecret.length < 100){
+		$.ajax({
+			type : "post",
+			url : "{:__URL('ADMIN_MAIN/wchat/setInstanceAppletConfig')}",
+			data : { "appid" : appid, "appsecret" : appsecret},
+			success : function(res) {
+				if (res.code > 0) {
+					showTip(res["message"],'success');
+				} else {
+					showTip(res["message"],'error');
+				}
+			}
+		});
+	}
+}
+</script>
+{/block}

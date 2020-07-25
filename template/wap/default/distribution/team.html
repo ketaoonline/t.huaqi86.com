@@ -1,0 +1,80 @@
+{extend name="$base" /}
+{block name="resources"}
+<link href="WAP_CSS/distribution_team.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="main"}
+{php}
+$promoter_id = input('promoter_id', '');
+{/php}
+<div class="team">
+	<nav class="ns-border-color-gray">
+		<ul>
+	        <li class="cf-tab-item active ns-bg-color" data-type="promoter"><a href="javascript:;">分销商</a></li>
+	        <li class="cf-tab-item" data-type="member"><a href="javascript:;">会员</a></li>
+		</ul>
+	</nav>
+
+	<div class="team-list mescroll" id="list_mescroll">
+		<ul class="list-content">
+			
+		</ul>
+	</div>
+</div>
+{/block}
+{block name="footer"}{/block}
+{block name="script"}
+<script>
+var mescroll = new ScrollList("list_mescroll", loadinfo);	
+
+$(function(){
+	$('.team nav li').click(function(event) {
+		$(this).addClass('active ns-bg-color').siblings('li').removeClass('active ns-bg-color');
+		loadinfo(1, false)
+	});
+})
+
+function loadinfo(page_index, is_append){
+	var params = {
+		promoter_id : {$promoter_id},
+		page : page_index,
+		type : $('.team nav .active').attr('data-type')
+	}
+	var html = '';
+	api("System.Distribution.myTeam", params, function (res) {
+		var data = res.data;
+		var list = data.data;
+		if (list.length > 0) {
+			$(list).each(function (index, item) {
+				item.user_headimg = item.user_headimg ? item.user_headimg : '{$default_headimg}';
+				if (item.is_partner == 1) {
+					item.role_name = '股东';
+				} else if (item.is_promoter == 1) {
+					item.role_name = '分销商';
+				} else {
+					item.role_name = '会员';
+				}
+				html += `
+					<div class="team-item ns-border-color-gray">
+						<img src="`+ __IMG(item.user_headimg) +`"/>
+						<div class="team-info">
+							<strong class="ns-text-color-black">`+ item.nick_name +`</strong>
+							<strong class="role-name ns-text-color">(`+ item.role_name +`)</strong><br>`;
+				if(item.recommender_name) {
+					html += `<strong class="role-user ns-text-color-gray">{:lang('referrer')}：`+ item.recommender_name +`</strong><br>`;
+				}
+				html += `<time class="ns-text-color-gray">{:lang('registration_time')}：`+ timeStampTurnTime(item.reg_time) +`</time>
+						</div>
+					</div>
+				`;
+			})
+		} else {
+			html += '<p class="empty">{:lang("you_not_have_team")}</p>';
+		}
+		if (is_append) $("#list_mescroll ul").append(html);
+		else $("#list_mescroll ul").html(html);
+		mescroll.endByPage(data.total_count, data.page_count);
+	})
+}
+</script>
+{/block}

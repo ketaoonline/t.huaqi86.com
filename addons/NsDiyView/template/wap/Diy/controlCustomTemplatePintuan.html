@@ -1,0 +1,107 @@
+<style>
+.pintuan-box{
+	padding:10px 10px;
+	background:#fff;
+	overflow:hidden;
+}
+.pintuan-box .pintuan-title{
+	padding:10px 0px;
+	position:relative;	
+}
+.pintuan-box .pintuan-title h4{
+	margin:0px;	
+	font-size:16px;
+}
+.pintuan-box .pintuan-title img{width:70px;}
+.pintuan-box .pintuan-title a{
+	position:absolute;
+	right:0px;
+	top:11px;
+	font-size:12px;
+	padding-right:15px;
+	color:#ff0036;
+}
+.pintuan-box .pintuan-title a:before{
+	position:absolute;
+	right:0px;
+	top:0px;
+	font-size:12px;
+}
+.pintuan-box .goods-list  li{
+	width:23.4vw;
+/* 	border:1px solid #e5e5e5; */
+ 	padding:1.5vw;	 
+	float:left;
+}
+.pintuan-box .goods-list li .goods-img{
+	width:20.8vw;
+	height:20.8vw;
+	border: 1px solid #ebebeb;
+	border-radius: 3px;
+}
+.pintuan-box .goods-list li .goods-img img{border-radius: 3px;}
+.pintuan-box .goods-list li .goods-name{
+	font-size:14px;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+	margin-top:7px;
+}
+.pintuan-box .goods-list li .tuangou-num{
+	background:#ff0036;
+	color:#fff;
+	font-size:12px;
+	padding:2px 6px;
+	border-radius:3px;
+}
+.pintuan-box .goods-list li .tuangou-money{
+	color: #ff0036;
+    font-size: 12px;
+    margin-top: 5px;
+}
+.pintuan-title p{color:#a7a7a7;margin-top: 3px;}
+.goods-price{padding-top:5px;}
+.discount-goods-box{display: inline-block;}
+.pintuanbox{width:40px;float: right;background:url(__STATIC__/wapCustomTemplate/images/pintuan_list.png) no-repeat;background-size: 100% 100%;}
+.pintuanprice{font-size: 14px;color: #ff0036;}
+.origeprice{text-decoration: line-through;font-size:12px;}
+</style>
+{if condition="addon_is_exit('NsPintuan') == 1"}
+{php}
+	$pintuan_list = api("NsPintuan.Pintuan.goodsList",['page_size'=>4,'condition'=> json_encode(['npg.is_open' => 1, 'npg.is_show' => 1]),'order'=>'npg.create_time desc']);
+	$pintuan_list = $pintuan_list['data'];
+{/php}
+	{if condition = "$pintuan_list"}
+	<div class="pintuan-box">
+		<div class="pintuan-title">
+			<h4><img src="__STATIC__/wapCustomTemplate/images/index-pintuan.png"/></h4>
+			<a class="iconfont iconright" href="{:__URL('APP_MAIN/goods/pintuan')}">查看更多</a>
+			<p>拼团促销每日更新</p>
+		</div>
+		<div class="goods-list">	
+			<ul class="discount-goods-box">
+				{foreach name="$pintuan_list['data']" item="vo" key="k"}
+				{if condition = "$k < 4"}
+				<li class="discount-goods">
+					<a href="{:__URL('APP_MAIN/goods/detail?goods_id='.$vo['goods_id'])}">
+						<div class="goods-img">
+							<img alt="" src="{:__IMG($vo.pic_cover_mid)}">
+						</div>
+		<!-- 					<p class="goods-name">{$vo.goods_name}<p> -->
+						<div class="goods-price">
+							<p class="pintuanprice">￥{$vo.tuangou_money}</p>
+							<p class="origeprice">￥{$vo.price}</p>
+						</div>
+					</a>						
+				</li>
+				{/if}
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+	{/if}
+{/if}
+<script>
+
+</script>

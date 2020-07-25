@@ -1,0 +1,57 @@
+{extend name="$base" /}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="set-style">
+	<h4 class="first"><span></span>前台商品展示数量</h4>
+	<dl>
+		<dt>商品展示数量：</dt>
+		<dd>
+			<input id="transparency" type="number" min="0" step="1" value="{$info.show_num}" class="input-common harf" autocomplete="off" name="show_num">
+		</dd>
+	</dl>
+	<dl>
+		<dt>排序方式设置：</dt>
+		<dd>
+			<label class="radio inline normal">
+				<i class="radio-common {eq name="$info['sort_type']" value="desc"}selected{/eq}">
+					<input type="radio" value="desc" name="sort_type" {eq name="$info['sort_type']" value="desc"}checked{/eq} />
+				</i>
+				<span>按排序号降序排列</span>
+			</label>
+			<label class="radio inline normal">
+				<i class="radio-common {eq name="$info['sort_type']" value="asc"}selected{/eq}">
+					<input type="radio" value="asc" name="sort_type" {eq name="$info['sort_type']" value="asc"}checked{/eq} />
+				</i>
+				<span>按排序号升序排列</span>
+			</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt></dt>
+		<dd><button class="btn-common btn-big" onclick="save();">保存</button></dd>
+	</dl>
+</div>
+
+<script>
+function save(){
+	var field = {
+		show_num : $('[name="show_num"]').val(),
+		sort_type : $('[name="sort_type"]:checked').val()
+	};
+
+	$.ajax({
+		type : "post",
+		url : "{:__URL('ADMIN_MAIN/config/systemConfig')}",
+		data : {value : JSON.stringify(field)},
+		success : function(data) {
+			if (data["code"] > 0) {
+				showTip(data["message"],"success");
+			} else {
+				showTip(data["message"],"error");
+			}
+		}
+	});
+}	
+</script>
+{/block}

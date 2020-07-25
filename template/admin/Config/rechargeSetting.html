@@ -1,0 +1,53 @@
+{extend name="$base" /}
+
+{block name="resources"}
+{/block}
+
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>是否开启充值：</dt>
+		<dd>
+			<label class="radio inline normal">
+				<i class="radio-common {if $info['is_open'] eq 1}selected{/if}">
+					<input type="radio" name="is_open" {if $info['is_open'] eq 1}checked{/if} value="1">
+				</i>
+				<span>启用</span>
+			</label>
+			<label class="radio inline normal">
+				<i class="radio-common {if $info['is_open'] eq 0}selected{/if}">
+					<input type="radio" name="is_open" value="0" {if $info['is_open'] eq 0}checked{/if}>
+				</i>
+				<span>禁用</span>
+			</label>
+			<p class="hint">是否开启充值功能</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt></dt>
+		<dd><button class="btn-common btn-big" onclick="save();">保存</button></dd>
+	</dl>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+function save(){
+	$.ajax({
+		type : "post",
+		url : "{:__URL('ADMIN_MAIN/config/rechargeSetting')}",
+		data : {
+			'is_open' : $('[name="is_open"]:checked').val(),
+		},
+		success : function(data) {
+			if (data['code'] > 0) {
+				showMessage('success',"提交成功");
+				window.location.reload();
+			} else {
+				showMessage('error',"提交失败");
+			}
+		}
+	});
+}
+</script>
+{/block}

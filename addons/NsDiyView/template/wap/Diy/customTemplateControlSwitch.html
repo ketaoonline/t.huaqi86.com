@@ -1,0 +1,133 @@
+<!-- 核心 -->
+<link href="WAP_ADDON_CSS/wap_custom_template.css" rel="stylesheet" />
+<!-- <script src="__ROOT__/addons/customtemplate/public/js/public_assembly.js"></script> -->
+{if condition="$custom_template"}
+	{foreach $custom_template.template_data as $k=>$custom_template_v}
+	
+		{if condition="$custom_template_v['control_name'] eq 'GoodsSearch'"}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateSearch.html'/}
+		
+		{elseif condition="$custom_template_v['control_name'] eq 'Notice'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateNotice.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'GoodsList'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateGoodsList.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'TextNavigation'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateTextNavigation.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'ImgAd'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateImgAd.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'AuxiliaryBlank'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateAuxiliaryBlank.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'AuxiliaryLine'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateAuxiliaryLine.html'/}
+		
+		{elseif condition="$custom_template_v['control_name'] eq 'RichText'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateRichText.html'/}
+
+		{elseif condition="$custom_template_v['control_name'] eq 'NavHyBrid'" /}
+		
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateNavHyBrid.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'Title'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateTitle.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'GoodsClassify'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateGoodsClassify.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'Coupons'" /}
+			
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateCoupon.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'Video'" /}
+		
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateVideo.html'/}
+		
+		{elseif condition="$custom_template_v['control_name'] eq 'ShowCase'" /}
+		
+			{include file="./addons/NsDiyView/template/wap/Diy/controlCustomTemplateShowCase.html" /}
+		
+		{elseif condition="$custom_template_v['control_name'] eq 'Footer'" /}
+		
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateFooter.html'/}
+			
+		{elseif condition="$custom_template_v['control_name'] eq 'Discount'" /}
+		
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateDiscount.html'/}
+		
+		{elseif condition="$custom_template_v['control_name'] eq 'GroupPurchase'" /}
+		
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplateGroupPurchase.html'/}
+		
+		{elseif condition="$custom_template_v['control_name'] eq 'Pintuan'" /}
+		
+			{include file='./addons/NsDiyView/template/wap/Diy/controlCustomTemplatePintuan.html'/}
+		
+		{/if}
+		
+	{/foreach}
+{/if}
+<script>
+$(function(){
+	
+	setFontSize();
+	updatNavImgMargin();
+	
+	//底部从下至上排列
+	var footer_length = $(".control-footer.js-custom").length;
+	if(footer_length>0){
+
+		$(".control-footer.js-custom").each(function(i){
+
+			var bottom = 0;
+
+			for(var j=0;j<i;j++) bottom += $(".control-footer.js-custom:eq(" + (j) + ")").height();
+
+			//分界线
+			if(bottom == 0) bottom = -1;
+			$(this).css("bottom",bottom).attr("data-index",i);
+			
+			$(".js-bottom-blank").css("height",bottom + $(".control-footer.js-custom:eq(" + (j) + ")").height()+10);
+
+		});
+		
+		//如果当前访问的是默认模板，则进行处理，//base界面已经加载过一次了，此处要删除
+		if(footer_flag == "base_footer" && footer_length>1) $(".js-base-footer").remove();
+	}
+
+})
+window.onresize = function(){
+	setFontSize();
+	updatNavImgMargin();
+	
+}
+
+function setFontSize(){
+
+	var width = $(window).width() > 440 ? 440 : $(window).width();
+	$("html").css({
+		width : "100%",
+		height : "100%",
+		fontSize : Math.floor(width/10)
+	});
+}
+
+//修改图文导航上下间距
+function updatNavImgMargin(){
+	//if($(window).width()>= 425) $(".control-nav-img ul li div").css("margin-bottom","10px");
+	//else $(".control-nav-img ul li div").css("margin-bottom","2px");
+}
+</script>

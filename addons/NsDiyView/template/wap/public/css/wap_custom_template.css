@@ -1,0 +1,585 @@
+@charset "utf-8";
+
+/* ----------------------- 自定义模板 ----------------------- */
+
+/* start 搜索框 start */
+.custom-search {
+    width: 90%;
+    margin: 0 5%;
+    height: 38px;
+    border-radius: 38px;
+    overflow: hidden;
+    position: relative;
+    padding-left: 30px;
+}
+
+.custom-search .custom-search-button {
+	position: absolute;
+    left: 0px;
+    width: 10%;
+    margin: 8px 0;
+    height: 22px;
+    line-height: 22px;
+    border: none;
+    font-size: 14px;
+    text-indent: -9999px;
+    background: url(../images/index_search.png) center no-repeat;
+    background-size: 14px 14px;
+    border-left: 1px solid #e5e5e5;
+    float: right;
+}
+
+.custom-search .custom-search-input{
+    width: 75%;
+    height: 22px;
+    line-height: 22px;
+    margin: 8px 0;
+    padding: 0 5px;
+    border: none;
+    background: inherit;
+}
+
+.custom-search .custom-search-input::-webkit-input-placeholder{
+	font-size: 14px;
+}
+/* end 搜索框 end */
+
+/* start 标题 start */
+.contro-title .contro-title-h{
+	margin-bottom: 0;
+	display: flex;
+    align-items: center;
+}
+.contro-title .contro-title-h i{
+	display:inline-block;
+	width:26px;
+	height:15px;	
+	background:url('../images/title-before.png') no-repeat;
+	background-size:100% 100%;
+	margin-right: 5px;
+}
+/* end 标题 end */
+
+/* start 文本导航 start */
+.control-text-navigation {
+	background-color:#FFF;
+	overflow-y:auto;
+	white-space:nowrap;
+}
+
+.control-text-navigation i {
+	float:right;
+	margin:3px 10px 0 0;
+}
+
+.control-text-navigation span {
+	display:inline-block;
+	min-width:25%;
+	text-overflow:ellipsis;
+	text-align:center;
+}
+
+.control-text-navigation::-webkit-scrollbar {
+	display:none;
+}
+/* end 文本导航 end */
+
+/* start 商品列表 start */
+.control-thumbnail {
+	text-align:center;
+	color:#ffffff;
+	margin:0;
+}
+
+.control-goods-buy-style-cart {
+	border:0;
+	float:right;
+	height:30px;
+	width:40px;
+	outline:none;
+	padding:0;
+	background:transparent;
+}
+
+.control-goods-buy-style-cart img {
+	display:inline-block;
+	vertical-align:middle;
+	max-width:100%;
+	max-height:100%;
+	height:auto;
+}
+
+.control-goods-name {
+	font-size: 14px;
+}
+
+.control-goods-price {
+	height:30px;
+	line-height:30px;
+}
+
+.control-goods-price em {
+	font-style:normal;
+	font-weight:bold;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	display:inline-block;
+	font-size:14px;
+}
+
+.control-goods-list-big {
+}
+
+.control-goods-list-big li {
+	padding:10px;
+	border:1px solid #e5e5e5;
+	margin:0 0 10px 0;
+	background:#ffffff;
+}
+
+.control-goods-list-big .control-thumbnail a {
+	display:block;
+}
+
+.control-goods-list-big .control-thumbnail > div {
+	width: 100%;
+	padding: 50% 0;
+	position: relative;
+	text-align: center;
+	line-height: 1;
+}
+
+.control-goods-list-big .control-thumbnail img {
+	display:block;
+	vertical-align:middle;
+	width:100%;
+	max-height:100%;
+	height:auto;
+	font-size:12px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.control-goods-list-big .control-goods-name {
+	font-weight:bold;
+	margin:10px 0 0;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.category-goods-list{
+	background:#fff;
+}
+.category-goods-list ul{
+	padding:10px 10px;
+}
+.control-goods-list-small {
+	overflow:hidden;
+}
+
+.control-goods-list-small li {
+	float:left;
+	width:49%;
+	margin:1% 0;
+	background:#ffffff;
+	border:1px solid #e5e5e5;
+	padding:1%;
+	border-radius: 6px;
+    overflow: hidden;
+}
+
+.control-goods-list-small li:NTH-CHILD(even) {
+	float:right;
+}
+
+.control-goods-list-small .control-thumbnail {
+	padding:10px 5px;
+}
+
+.control-goods-list-small .control-thumbnail a {
+	display:block;
+}
+
+.control-goods-list-small .control-thumbnail > div {
+	width: 100%;
+	padding: 50% 0;
+	position: relative;
+	text-align: center;
+}
+
+.control-goods-list-small .control-thumbnail img {
+	display:block;
+	vertical-align:middle;
+	max-width:100%;
+	max-height:100%;
+	height:auto;
+	max-width:100%;
+	font-size:12px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.control-goods-list-small .control-goods-name {
+	font-weight:normal;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	padding:0 5px;
+	margin-bottom: 0;
+	font-size: 14px;
+}
+
+i.goods-tab {
+	font-style:normal;
+	font-size:12px;
+	color:#fff;
+	padding:1px 3px;
+	margin-right:2px;
+	border-radius:2px;
+	font-weight:normal;
+}
+
+i.shipping-fee {
+	font-style:normal;
+	font-size:12px;
+	background:#fff;
+	padding:1px 3px;
+	margin-left:5px;
+	border-radius:2px;
+	border:1px solid;
+	display:inline-block;
+	line-height:1;
+	font-weight:normal;
+}
+/* end 商品列表 end */
+
+.fixed {
+	position: fixed;
+	width: 100%;
+}
+
+/* start 优惠券 start */
+/*样式一*/
+.coupon-all {
+	height:90px;
+	padding:10px 0 0 0;
+	background:#fff;
+	margin-bottom:0;
+	white-space:nowrap;
+	overflow-y:auto;
+}
+
+.coupon-all::-webkit-scrollbar {
+	display:none;
+}
+
+.coupon-all .coupon {
+	width:160px;
+	margin-left:10px;
+	border-radius:5px;
+	display:inline-block;
+	position:relative;
+	top:0;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    width: 153px;
+    height: 67px;
+    color: #fff;
+    padding: 0 4px;
+    box-sizing: border-box;
+    background: linear-gradient(#f76b0a, #ed3705, #f76b0a);
+}
+
+.coupon-all .coupon p {
+	position:absolute;
+	z-index:5;
+	font-size:40px;
+	color:#fff;
+	top: 15px;
+    left: 11px;
+}
+
+.coupon-all .coupon p span {
+	font-size: 20px;
+    color: #fff;
+}
+
+.coupon-all .coupon img.background_img {
+	max-height:100%;
+	max-width:100%;
+	position:absolute;
+	z-index:1;
+}
+
+.coupon-all .coupon img.already_received {
+	max-height:60%;
+	max-width:60%;
+	position:absolute;
+	z-index:10;
+	display:none;
+}
+
+.coupon-all .coupon:last-child {
+	margin-right:10px;
+}
+.coupon .cou-top{
+	font-size: 15px;
+    position: relative;
+    top: -1px;
+    left: 11px;
+    color: #ee3604;
+    display: inline-block;
+    width: 25px;
+    height: 28px;
+    background: #fee882;
+    text-align: center;
+    line-height: 17px;
+}
+.coupon .cou-top:after{
+    content: "";
+    position: absolute;
+    border: 17px solid transparent;
+    border-bottom-color: #f1420b;
+    left: -4px;
+    border-width: 17px 17px 9px 17px;
+    bottom: 0px;
+}
+.coupon .receive i{
+	font-size:14px;
+	margin-left:3px
+}
+.coupon .receive i:before{
+	content: "\f105";
+}
+.coupon .receive{
+	display: inline-block;
+	white-space: initial;
+	margin-left: 14px;
+	line-height: 1.0;
+	vertical-align: middle;
+	position: absolute;
+	top: 42px;
+	right: 5px;
+	background: #f9d22c;
+	border-radius: 15px;
+	padding: 1px 6px 1px 8px;
+	color:#923523; 
+	font-size:12px; 
+}
+.coupon .cou-tips{
+	font-size: 12px;
+    color: #fff;
+    position: absolute;
+    top: 8px;
+    right: 6px;
+}  
+
+/*样式二*/
+.coupon-all2 {
+	padding:5px 0 5px;
+	background:#fff;
+	overflow:hidden;
+}
+
+.coupons-style2 {
+	width:31.33%;
+	height:75px;
+	display:inline-block;
+	float:left;
+	background:#f23c3c url("../images/index_coupon_bg.png") no-repeat;
+	background-size:100% 100%;
+	margin:0 0 1.5% 1.5%;
+	color:#fff;
+	text-align:center;}.coupons-style2 .money-number {
+	display:block;
+	margin:0;
+	padding-top:8px;
+	line-height:22px;
+	font-size:21px;
+	color:#fff;
+	text-align:center;
+}
+
+.coupons-style2 .explanation {
+	display:block;
+	margin:0;
+	font-size:12px;
+	color:rgba(255,255,255,.7);
+	text-align:center;
+}
+
+.coupons-style2 .get {
+	font-size:12px;
+	position:relative;
+	color:rgba(255,255,255,.7);
+}
+
+
+
+/* end 优惠券 end */
+
+/* start 商品分类 start */
+.custom-class-box {
+	background-color:#FFF;
+}
+
+.control-goods-classify {
+	overflow:hidden;
+	background-color:#FFF;
+	border-top:1px solid #e5e5e5;
+	border-bottom:1px solid #e5e5e5;
+}
+
+.control-goods-classify aside {
+	width:29.6%;
+	height:370px;
+	overflow:auto;
+	border-right:1px solid #e5e5e5;
+}
+
+.control-goods-classify aside,.control-goods-classify section {
+	float:left;
+}
+
+.control-goods-classify  aside {
+	display:block;
+	background-color:#FFF;
+}
+
+.control-goods-classify aside li {
+	padding:10px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	line-height:20px;
+}
+
+.custom-main {
+	background:#F8F8F8;
+	min-height:325px;
+	border-top:0;
+	position:relative;
+	padding-bottom:75px;
+}
+
+.control-goods-classify section {
+	width:70%;
+	background-color:#FFF;
+	overflow-y:scroll;
+}
+
+.control-goods-classify aside,.control-goods-classify section {
+	float:left;
+}
+
+.control-goods-classify  session {
+	display:block;
+	background-color:#FFF;
+}
+
+.control-goods-classify section li {
+	margin:10px 0 10px 10px;
+	overflow:hidden;
+	border-bottom:1px solid #e5e5e5;
+	padding-bottom:10px;
+}
+
+.control-goods-classify section li:last-child {
+	border-bottom:none;
+}
+
+.control-goods-classify section li>div:first-child {
+	color:#ffffff;
+	float:left;
+	width:30%;
+	text-align:center;
+	font-size:12px;
+}
+
+.blue-bg {
+	background:#81D5FA;
+}
+
+.control-goods-classify section li>div:last-child {
+	float:left;
+	height:70px;
+	margin-left:10px;
+	width:65%;
+	position:relative;
+}
+
+.control-goods-classify section li>div:last-child span {
+	display:block;
+	padding:10px 0;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+
+.control-goods-classify section li>div:last-child em {
+	font-style:normal;
+	color:#ff6600;
+	font-weight:bold;
+	font-size:14px;
+}
+
+.control-goods-classify section li>div:last-child button {
+	position:absolute;
+	right:10px;
+	bottom:0;
+}
+
+.no-goods {
+	text-align:center;
+	padding-top:50px;
+	font-size:12px;
+}
+
+.no-goods img {
+	width:30px;
+	margin-bottom:10px;
+}
+
+i.shipping-fee {
+	font-style:normal;
+	font-size:12px;
+	background:#fff;
+	padding:1px 3px;
+	margin-left:5px;
+	border-radius:2px;
+	border:1px solid;
+	display:inline-block;
+	line-height:1;
+	font-weight:normal;
+}
+
+.control-goods-buy-style-cart {
+	border:0;
+	float:right;
+	height:30px;
+	width:40px;
+	outline:none;
+	padding:0;
+	background:transparent;
+}
+
+.control-goods-buy-style-cart img {
+	display:inline-block;
+	vertical-align:middle;
+	max-width:100%;
+	max-height:100%;
+	height:auto;
+}
+
+/* end 商品分类 end */
+
+/* 首页浮层 */
+.wap-floating{width: 80%; position: fixed; z-index: 9999; left: 50%; top: 50%;transform: translate(-50%,-50%); display: none;}
+.wap-floating .close-wrap{display: block; position: absolute; right: -10%; top: -11%; padding: 2px 5px;width: 17%; z-index: 1}
+.wap-floating .close-wrap img{width: 30px;}
+.wap-floating .img-wrap{display: block; text-align: center;}
+.wap-floating .img-wrap img{width: 90%;}
+

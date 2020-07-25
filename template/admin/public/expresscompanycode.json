@@ -1,0 +1,408 @@
+[
+    {
+        "name": "顺丰",
+        "aliases": {
+            "kd100": "shunfeng",
+            "kdniao": "SF"
+        }
+    },
+    {
+        "name": "申通",
+        "aliases": {
+            "kd100": "shentong",
+            "kdniao": "STO"
+        }
+    },
+    {
+        "name": "中通",
+        "aliases": {
+            "kd100": "zhongtong",
+            "kdniao": "ZTO"
+        }
+    },
+    {
+        "name": "中通快运",
+        "aliases": {
+            "kd100": "",
+            "kdniao": "ZTO"
+        }
+    },
+    {
+        "name": "圆通",
+        "aliases": {
+            "kd100": "yuantong",
+            "kdniao": "YTO"
+        }
+    },
+    {
+        "name": "韵达",
+        "aliases": {
+            "kd100": "yunda",
+            "kdniao": "YD"
+        }
+    },
+    {
+        "name": "天天",
+        "aliases": {
+            "kd100": "tiantian",
+            "kdniao": "HHTT"
+        }
+    },
+    {
+        "name": "EMS",
+        "aliases": {
+            "kd100": "ems",
+            "kdniao": "EMS"
+        }
+    },
+    {
+        "name": "EMS国际",
+        "aliases": {
+            "kd100": "emsguoji",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "马来西亚（大包EMS）",
+        "aliases": {
+            "kd100": "malaysiaems",
+            "kdniao": "EMSGJ"
+        }
+    },
+    {
+        "name": "邮政国内（挂号信）",
+        "aliases": {
+            "kd100": "youzhengguonei",
+            "kdniao": "YZBK"
+        }
+    },
+    {
+        "name": "汇通",
+        "aliases": {
+            "kd100": "huitongkuaidi",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "全峰",
+        "aliases": {
+            "kd100": "quanfengkuaidi",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "德邦",
+        "aliases": {
+            "kd100": "debangwuliu",
+            "kdniao": "DBL"
+        }
+    },
+    {
+        "name": "国通",
+        "aliases": {
+            "kd100": "guotongkuaidi",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "如风达",
+        "aliases": {
+            "kd100": "rufengda",
+            "kdniao": "RFD"
+        }
+    },
+    {
+        "name": "京东",
+        "aliases": {
+            "kd100": "jd",
+            "kdniao": "JD"
+        }
+    },
+    {
+        "name": "宅急送",
+        "aliases": {
+            "kd100": "zhaijisong",
+            "kdniao": "ZJS"
+        }
+    },
+    {
+        "name": "Fedex",
+        "aliases": {
+            "kd100": "fedexcn",
+            "kdniao": "FEDEX"
+        }
+    },
+    {
+        "name": "Fedex国际",
+        "aliases": {
+            "kd100": "fedex",
+            "kdniao": "FEDEX_GJ"
+        }
+    },
+    {
+        "name": "UPS",
+        "aliases": {
+            "kd100": "ups",
+            "kdniao": "UPS"
+        }
+    },
+    {
+        "name": "中铁",
+        "aliases": {
+            "kd100": "",
+            "kdniao": "ZHWL"
+        }
+    },
+    {
+        "name": "佳吉",
+        "aliases": {
+            "kd100": "jiajiwuliu",
+            "kdniao": "CNEX"
+        }
+    },
+    {
+        "name": "速尔",
+        "aliases": {
+            "kd100": "suer",
+            "kdniao": "SURE"
+        }
+    },
+    {
+        "name": "信丰",
+        "aliases": {
+            "kd100": "xinfengwuliu",
+            "kdniao": "XFEX"
+        }
+    },
+    {
+        "name": "优速",
+        "aliases": {
+            "kd100": "youshuwuliu",
+            "kdniao": "UC"
+        }
+    },
+    {
+        "name": "中邮",
+        "aliases": {
+            "kd100": "zhongyouwuliu",
+            "kdniao": "ZYKD"
+        }
+    },
+    {
+        "name": "天地华宇",
+        "aliases": {
+            "kd100": "tiandihuayu",
+            "kdniao": "HOAU"
+        }
+    },
+    {
+        "name": "安信达",
+        "aliases": {
+            "kd100": "anxindakuaixi",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "快捷",
+        "aliases": {
+            "kd100": "kuaijiesudi",
+            "kdniao": "DJKJWL"
+        }
+    },
+    {
+        "name": "AAE全球专递",
+        "aliases": {
+            "kd100": "aae",
+            "kdniao": "AAE"
+        }
+    },
+    {
+        "name": "DHL国内件",
+        "aliases": {
+            "kd100": "dhl",
+            "kdniao": "FEDEX"
+        }
+    },
+    {
+        "name": "DHL国际件",
+        "aliases": {
+            "kd100": "dhlen",
+            "kdniao": "FEDEX_GJ"
+        }
+    },
+    {
+        "name": "DPEX国际",
+        "aliases": {
+            "kd100": "dpex",
+            "kdniao": "DPEX"
+        }
+    },
+    {
+        "name": "D速",
+        "aliases": {
+            "kd100": "dsukuaidi",
+            "kdniao": "DSWL"
+        }
+    },
+    {
+        "name": "FEDEX国内",
+        "aliases": {
+            "kd100": "fedexcn",
+            "kdniao": "FEDEX"
+        }
+    },
+    {
+        "name": "FEDEX国际",
+        "aliases": {
+            "kd100": "fedex",
+            "kdniao": "FEDEX_GJ"
+        }
+    },
+    {
+        "name": "OCS",
+        "aliases": {
+            "kd100": "ocs",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "TNT",
+        "aliases": {
+            "kd100": "tnt",
+            "kdniao": "TNT"
+        }
+    },
+    {
+        "name": "中国东方",
+        "aliases": {
+            "kd100": "coe",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "传喜",
+        "aliases": {
+            "kd100": "chuanxiwuliu",
+            "kdniao": "CXHY"
+        }
+    },
+    {
+        "name": "城市100",
+        "aliases": {
+            "kd100": "city100",
+            "kdniao": "CITY100"
+        }
+    },
+    {
+        "name": "城市之星",
+        "aliases": {
+            "kd100": "",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "安捷",
+        "aliases": {
+            "kd100": "anjie88",
+            "kdniao": "AJ"
+        }
+    },
+    {
+        "name": "百福东方",
+        "aliases": {
+            "kd100": "baifudongfang",
+            "kdniao": "BFDF"
+        }
+    },
+    {
+        "name": "程光",
+        "aliases": {
+            "kd100": "chengguangkuaidi",
+            "kdniao": "CG"
+        }
+    },
+    {
+        "name": "递四方",
+        "aliases": {
+            "kd100": "disifang",
+            "kdniao": "D4PX"
+        }
+    },
+    {
+        "name": "长通",
+        "aliases": {
+            "kd100": "",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "飞豹",
+        "aliases": {
+            "kd100": "feibaokuaidi",
+            "kdniao": ""
+        }
+    },
+    {
+        "name": "安能",
+        "aliases": {
+            "kd100": "annengwuliu",
+            "kdniao": "ANE"
+        }
+    },
+    {
+        "name": "远成",
+        "aliases": {
+            "kd100": "yuanchengwuliu",
+            "kdniao": "YCWL"
+        }
+    },
+    {
+        "name": "邮政",
+        "aliases": {
+            "kd100": "youzhengbk",
+            "kdniao": "YZPY"
+        }
+    },
+    {
+        "name": "百世",
+        "aliases": {
+            "kd100": "huitongkuaidi",
+            "kdniao": "HTKY"
+        }
+    },
+    {
+        "name": "苏宁",
+        "aliases": {
+            "kd100": "suning",
+            "kdniao": "SNWL"
+        }
+    },
+    {
+        "name": "安能",
+        "aliases": {
+            "kd100": "annengwuliu",
+            "kdniao": "ANE"
+        }
+    },
+    {
+        "name": "九曳",
+        "aliases": {
+            "kd100": "jiuyescm",
+            "kdniao": "JIUYE"
+        }
+    },
+    {
+        "name": "亚马逊",
+        "aliases": {
+            "kd100": "",
+            "kdniao": "AMAZON"
+        }
+    },
+    {
+        "name": "环球速运",
+        "aliases": {
+            "kd100": "",
+            "kdniao": "HQSY"
+        }
+    }
+]

@@ -1,0 +1,301 @@
+{extend name="$base" /}
+{block name="resources"}
+<style>
+.modal-infp-style{width:90%;margin:10px auto;}
+.modal-infp-style table{width:100%;}
+.modal-infp-style table tr td{border: 1px solid #e5e5e5;padding: 10px;}
+.align_left{text-align: left;}
+.align_right{text-align: right;}
+</style>
+{/block}
+{block name="main"}
+<input type="hidden" id="oc_id" value="{$oc_id}"/>
+<table class="mytable">
+	<tr>
+		<th width="20%" style="text-align:left;"><button class="btn-common btn-small" onclick="save_custom();" style="margin:0 5px 0 0 !important;">添加字段</button></th>				
+	</tr>
+</table>
+<table class="table-class">
+		<colgroup>
+		<col style="width: 2%;">
+		<col style="width: 15%;">
+		<col style="width: 15%;">
+		<col style="width: 13%;">
+		<col style="width: 15%;">
+		<col style="width: 20%;">
+		<col style="width: 20%;">
+		</colgroup>
+	<thead>
+		<tr align="center">
+			<th>
+				<!-- <i class="checkbox-common"><input type="checkbox" ></i> -->
+			</th>
+			<th class="align_left">字段名称<span class="row-20"></th>
+			<th class="align_right">英文名称<span class="row-20"></th>
+			<th class="align_right">字段类型<span class="row-20"></th>
+			<th class="align_right">是否必填<span class="row-20"></th>
+			<th class="align_right">创建时间<span class="row-20"></th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+
+
+<!-- 表单弹框 -->
+<div class="modal fade hide" id="order_custom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<ul class="account_ul">
+					<li class="account_active">
+						<h3>设置字段</h3>
+					</li>
+				</ul>
+			</div>
+			<div class="account-point">
+				<div class="modal-body">
+					<div class="modal-infp-style">
+						<table>
+							<tr>
+								<td>字段名称</td>
+								<td colspan='3'>
+									<input type="text" id="field_name" class="input-common">
+								</td>
+							</tr>
+							<tr>
+								<td>英文名称</td>
+								<td colspan='3'>
+									<input type="text" id="field_e_name" class="input-common">
+								</td>
+							</tr>
+							<tr>
+								<td>字段类型</td>
+								<td colspan='3'>
+									<select id="field_type">
+										<option value="1">文本</option>
+										<option value="2">数字</option>
+										<option value="3">单选框</option>
+										<option value="4">复选框</option>
+									</select>
+								</td>
+							</tr>
+							<tr class="xuanxiang" style="display:none;">
+								<td>选项内容</td>
+								<td>
+									<textarea id="option_list" style="margin:0px;width:236px;height:100px;resize:none;"></textarea>
+									<p style="margin:0px;margin-top:10px;color:#8a8989;">格式：选项值[回车换行]值2....</p>
+								</td>
+							</tr>
+							<tr>
+								<td>是否必填</td>
+								<td colspan='3'>
+									<div class="total">
+										<label for="navigationtype2" class="radio inline normal">
+											<i class="radio-common">
+												<input type="radio" style="margin-left:0px" value="1" name="is_fill" id="is_fill1"/>
+											</i>
+											<span>是</span>
+										</label>
+										<label for="navigationtype1" class="radio inline normal">
+											<i class="radio-common">
+												<input type="radio" style="margin-left:0px" value="0" name="is_fill" id="is_fill0"/>
+											</i>
+											<span>否</span>
+										</label>				
+									</div>
+								</td>
+							</tr>
+						</table>
+						
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="hidden" id="id" />
+					<button class="btn-common btn-big" onclick="addCustomData()">保存</button>
+					<button class="btn-common-cancle btn-big" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{/block}
+{block name="script"}
+<script type="text/javascript">
+function save_custom(id = ""){
+	$("#id").val(id);
+	if(id){
+		$.ajax({
+			type : "post",
+			url : "{:__URL('__URL__/nsCustomForm/ADMIN_MODULE/config/getCustomDataDetail')}",
+			data : {
+				"id" : id
+			},
+			success : function(res){
+				if(res['field_type'] == 3 || res['field_type'] == 4){			
+					$("#option_list").val(res['option_text'].replace(/,/g, "\r\n"));
+					$(".xuanxiang").show();					
+				}else{
+					$(".xuanxiang").hide();
+				}
+				$("#field_type").val(res['field_type']);
+				$("#field_name").val(res['field_name']);
+				$("#field_e_name").val(res['field_e_name']);
+				
+				$("input[type='radio']").prop("checked", false);
+				$(".radio-common").removeClass("selected");
+				$("#is_fill"+ res['is_fill']).parent().addClass("selected");
+				$("#is_fill"+ res['is_fill']).prop("checked", true);
+			}
+		})
+	}else{
+		$("#field_type").val('');
+		$("#field_name").val('');
+		$("#field_e_name").val('');
+		$("#option_list").val('');
+		$(".xuanxiang").hide();
+		$("input[type='radio']").prop("checked", false);
+		$(".radio-common").removeClass("selected");
+		$("#is_fill0").parent(".radio-common").addClass("selected");
+		$("#is_fill0").prop("checked", true);	
+	}
+	
+	$("#order_custom").modal("show");
+}
+
+function addCustomData(){
+	var field_name = $("#field_name").val();
+	var field_e_name = $("#field_e_name").val();
+	var oc_id = $("#oc_id").val();
+	var is_fill = $("input[name='is_fill']:checked").val();
+	var field_type = $("#field_type").val();
+	var id = $("#id").val();
+	var option_list = $("#option_list").val();
+	
+	if(field_name == ""){
+		showMessage('error', '字段名称不能为空！');
+		return;
+	}
+	if(field_e_name == ""){
+		showMessage('error', '字段英文名称不能为空！');
+		return;
+	}
+	
+	if(field_type == 3 || field_type == 4){
+		if(option_list == ""){
+			showMessage('error', '选项内容不能为空！');
+			return;
+		}
+	}
+	var option_text = option_list.replace(/[\r\n]/g,",");//去掉回车换行
+	$.ajax({
+		type : "post",
+		url : "{:__URL('__URL__/nsCustomForm/ADMIN_MODULE/config/saveUpdateCustomData')}",
+		data : {
+			"field_name" : field_name,
+			"field_e_name" : field_e_name,
+			"oc_id" : oc_id,
+			"is_fill" : is_fill,
+			"field_type" : field_type,
+			"id" : id,
+			"option_list" : option_text
+		},
+		success : function(data){
+			if(data > 0){
+				showMessage('success', '保存成功');
+				$("#order_custom").modal("hide");
+				LoadingInfo(1);
+			}else if(data == -2){
+				showMessage('error', '英文名称不能重复');
+				$("#order_custom").modal("hide");
+			}else{
+				showMessage('error', '保存失败');
+				$("#order_custom").modal("hide");
+			}
+		}
+	})
+	
+}
+
+function LoadingInfo(page_index) {
+	var search_text = $("#search_text").val();
+	var oc_id = $("#oc_id").val();
+	$.ajax({
+		type : "post",
+		url : "{:__URL('__URL__/nsCustomForm/ADMIN_MODULE/config/getCustomDataList')}",
+		data : {
+			"page_index" : page_index,
+			"oc_id" : oc_id
+		},
+		success : function(data) {
+			if (data["data"].length > 0) {
+				$(".table-class tbody").empty();
+				for (var i = 0; i < data["data"].length; i++) {
+					if(data["data"][i]['is_fill'] == 1){
+						var is_fill_name = "是";
+					}else{
+						var is_fill_name = "否";
+					}
+					if(data["data"][i]['field_type'] == 1){
+						var field_type_name = "文本";
+					}else if(data["data"][i]['field_type'] == 2){
+						var field_type_name = "数字";
+					}else if(data["data"][i]['field_type'] == 3){
+						var field_type_name = "单选框";
+					}else if(data["data"][i]['field_type'] == 4){
+						var field_type_name = "复选框";
+					}
+					var html = '';
+					html += '<tr align="center">';
+					// <i class="checkbox-common"><input name="sub" type="checkbox" value="'+ data["data"][i]["coupon_type_id"]+'" ></i>
+					html += '<td></td>';
+					
+					html += '<td class="align_left">' + data["data"][i]["field_name"] + '<span class="row-20"></td>';
+					html += '<td class="align_right">' + data["data"][i]["field_e_name"] + '<span class="row-20"></td>';
+					html += '<td class="align_right">' + field_type_name + '<span class="row-20"></td>';
+					html += '<td class="align_right">' + is_fill_name + '<span class="row-20"></td>';
+					html += '<td class="align_right">'+ timeStampTurnTime(data["data"][i]["create_time"]) +'<span class="row-20"></td>';
+
+					html += '<td><a onclick="save_custom('+ data['data'][i]['id'] +')">修改</a>';					
+					html += '<a href="javascript:;" onclick="deleteCustomData('+data["data"][i]["id"]+');">删除</a><br/>';
+					html += '</td>';
+					html += '</tr>';
+					$(".table-class tbody").append(html);
+				}
+			} else {
+				var html = '<tr align="center"><td colspan="9">暂无符合条件的数据记录</td></tr>';
+				$(".table-class tbody").html(html);
+			}
+			initPageData(data["page_count"],data['data'].length,data['total_count']);
+			$("#pageNumber").html(pagenumShow(jumpNumber,$("#page_count").val(),{$pageshow}));
+		}
+	});
+}
+
+function deleteCustomData(id){
+	$.ajax({
+		type:"post",
+		url : "{:__URL('__URL__/nsCustomForm/ADMIN_MODULE/config/deleteCustom')}",
+		data : { "id" : id},
+		success : function(data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"]);
+				LoadingInfo(1);
+			}else{
+				showMessage('error', "删除失败");
+			}
+		}
+	})
+}
+
+$("#field_type").change(function(){
+	var type = $("#field_type").val();
+	if(type == 3 || type == 4){
+		$(".xuanxiang").show();
+	}else{
+		$(".xuanxiang").hide();
+	}
+})
+</script>
+{/block}

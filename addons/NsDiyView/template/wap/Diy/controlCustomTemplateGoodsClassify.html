@@ -1,0 +1,126 @@
+<!-- 商品分类 -->
+<style>
+
+</style>
+{if condition="!empty($custom_template_v.control_data['goods_classify'])"}
+<div class="goods-classify-{$k}">
+	<div class="control-goods-classify">
+		<aside class="contro-goods-class-box">
+			<ul>
+				{foreach $custom_template_v['control_data']['goods_classify'] as $class_key=>$class_v}
+					{if condition = "$class_key eq 0" }
+						<li class="contro-class-selected ns-text-color" onclick="selectCategoryGoodsList{$k}(this, {$class_v['id']});" data-id="{$class_v['id']}">{$class_v["name"]}</li>
+					{else/}
+						<li onclick="selectCategoryGoodsList{$k}(this,{$class_v['id']});" data-id="{$class_v['id']}">{$class_v["name"]}</li>
+					{/if}
+				{/foreach}
+			</ul>
+		</aside>
+		<section class="contro-goods-list-box">
+			<ul class="goods_list class-contro-list-style"> 
+				
+			</ul>
+			<input type="hidden" class="page" value="1">
+			<input type="hidden" class="page_count">
+		</section>
+		{if condition="$custom_template_v['control_data']['goods_classify'][0]['goods_show_buy_button'] == 1"}
+			<input type="hidden" name="buy_button_src" value="{:__IMG($custom_template_v['control_data']['goods_classify'][0]['goods_buy_button_src'])}">
+		{/if}
+	</div>
+</div>
+<script>
+var class_height = 0;
+
+$(function(){
+	class_height = $(".goods-classify-{$k} .contro-goods-class-box").height();
+	var list_height = $(".goods-classify-{$k} .contro-goods-list-box").height();
+	if(list_height >= class_height){
+		var height = list_height;
+	}else{
+		var height = class_height;
+	}
+	$(".goods-classify-{$k} .contro-goods-class-box,.goods-classify-{$k} .contro-goods-list-box").height(height); 
+	loadGoodsList{$k}(1);
+
+	$('.goods-classify-{$k} .contro-goods-list-box').scroll(function () {
+		if (is_load{$k}) {
+			var listHeight = $('.goods-classify-{$k} .contro-goods-list-box .goods_list').height(),
+				boxHeight = $(this).height(),
+				scrollTop = $(this).scrollTop();
+
+			if(scrollTop + boxHeight >= listHeight) {
+				var page = parseInt($(".goods-classify-{$k} .contro-goods-list-box .page").val()) + 1,//页数
+					total_page_count = $(".goods-classify-{$k} .contro-goods-list-box .page_count").val(); // 总页数
+				if (page > total_page_count) {
+					return false;
+				} else {
+					loadGoodsList{$k}(page);
+				}
+			}
+		}
+	})
+})
+
+function selectCategoryGoodsList{$k}(obj, id){
+	$(obj).addClass('contro-class-selected ns-text-color').siblings('li').removeClass('contro-class-selected ns-text-color');
+	loadGoodsList{$k}(1);
+}
+
+var is_load{$k} = true;
+function loadGoodsList{$k}(page) {
+	// 当前页未加载完毕，不允许加载下一页
+	if (is_load{$k}) {
+		is_load{$k} = false;
+		// 当前选中分类ID
+		var id = $('.goods-classify-{$k} .contro-goods-class-box .contro-class-selected').attr('data-id');
+		if (id == undefined || id == null || id == '') {
+			return false;
+		}
+		// 请求商品列表接口
+		api("System.Goods.goodsList", {'page_index': page, 'condition': {'ng.category_id_1': id, 'ng.state' : 1}}, function (res) {
+			var data = res.data;
+			$(".goods-classify-{$k} .contro-goods-list-box .page_count").val(data['page_count']);
+			$(".goods-classify-{$k} .contro-goods-list-box .page").val(page);
+			var list_html = "";
+			if (page > 1) {
+				// 不是第一页进行分页加载
+				list_html = $('.goods-classify-{$k} .contro-goods-list-box .goods_list').html();
+			}
+			if (data['data'].length > 0) {
+				for (var i = 0; i < data['data'].length; i++) {
+					var item = data['data'][i];
+					var buy_button_src = $('.goods-classify-{$k} [name="buy_button_src"]').val();
+
+					list_html += `<li>
+						<div>
+							<a href="`+ __URL(APPMAIN + '/goods/detail?goods_id=' + item['goods_id']) +`">
+							<img src="`+ __IMG(item.pic_cover_small) +`"/>
+							</a>
+						</div>
+						<div>
+							<a href="`+ __URL(APPMAIN + '/goods/detail?goods_id=' + item['goods_id']) +`">
+								<span>`+ item.goods_name +`</span>
+								<em class="ns-text-color">￥`+ item.promotion_price;
+					if(item.shipping_fee) {
+						list_html += `<i class="shipping-fee ns-text-color ns-border-color">包邮</i>`;
+					}
+					list_html += `</em>
+							</a>`;
+					if (buy_button_src != undefined) {
+						list_html += `<button class="control-goods-buy-style-cart">
+								<a href="`+ __URL(APPMAIN + '/goods/detail?goods_id=' + item['goods_id']) +`"><img src="`+ buy_button_src +`"></a>
+							</button>`;
+					}
+					list_html += `</div>
+					</li>`;
+				}
+			} else {
+				list_html += '<p class="no-goods ns-text-color-gray"><img src="' + WAPIMG + '/wap_nodata.png" height="100"><br><span>Sorry！没有找到您想要的商品……</span></p>';
+			}
+			is_load{$k} = true;
+			$('.goods-classify-{$k} .contro-goods-list-box .goods_list').html(list_html);
+		});
+	}
+}
+</script>
+{/if}

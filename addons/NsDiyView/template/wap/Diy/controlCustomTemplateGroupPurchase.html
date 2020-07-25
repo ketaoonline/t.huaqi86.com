@@ -1,0 +1,108 @@
+<style>
+.tuangou-box{
+	padding:10px 10px;
+	background:#fff;
+	overflow:hidden;
+}
+.tuangou-box .tuangou-title{
+	padding:10px 0px;
+	position:relative;	
+}
+.tuangou-box .goods-box{
+	border: 0.5px solid #e5e5e5;
+	border-radius: 4px;
+	height: 120px;
+	padding:10px;
+	position:relative;
+	margin-bottom: 10px;
+}
+.tuangou-box .tuangou-title h4{
+	margin:0px;	
+	font-size:16px;
+}
+.tuangou-box .tuangou-title a{
+	position:absolute;
+	right:0px;
+	top:11px;
+	font-size:12px;
+	padding-right:15px;
+}
+.tuangou-box .tuangou-title a:before{
+	position:absolute;
+	right:0px;
+	top:0px;
+	font-size:12px;
+}
+
+.tuangou-box .tuangou-goods .goods-img{
+	height:87px;
+	width:87px;
+	float:left;
+	margin-right:10px;
+} 
+.tuangou-box .tuangou-goods .goods-name{
+	font-weight: bold;
+	font-size:14px;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+} 
+.tuangou-box .tuangou-goods .goods-price{
+	font-size:12px;
+	margin-top:10px;
+} 
+.tuangou-box .tuangou-goods .goods-price span:nth-child(1){
+	margin-right:4px;
+} 
+.tuangou-box .tuangou-goods .goods-price span:nth-child(1) em{
+	text-decoration: line-through;
+    color: #898989;
+}
+.tuangou-box .tuangou-goods .goods-price span:nth-child(2) em{
+	color: #ff0036!important;
+}
+.tuangou-box .tuangou-goods a{
+	background:#ff0036;
+	color:#fff;
+	font-size:12px;
+	padding:5px 10px 3px 10px;;
+	border-radius:25px;
+	position:absolute;
+	bottom: 10px;
+    right: 10px;
+}
+.tuangou-title img{width:70px;}
+</style>
+{if condition="addon_is_exit('NsGroupBuy') == 1"}
+{php}
+	$tuangou = api('NsGroupBuy.GroupBuy.goodsList');
+	$tuangou_info = $tuangou['data']['data'];
+{/php}
+	{if condition = "$tuangou_info"}
+	<div class="tuangou-box">
+		<div class="tuangou-title">
+			<h4><img src="__STATIC__/wapCustomTemplate/images/index-groupby.png"/></h4>
+			<a class="iconfont iconright" href="{:__URL('APP_MAIN/goods/groupbuy')}">查看更多</a>
+		</div>
+	
+		{foreach name="$tuangou_info" item="vo" key="k"}
+			{if condition = "$k < 2"}
+				<div class="goods-box"> 	
+					<div class="tuangou-goods">
+						<div class="goods-img">
+							<img src="{:__IMG($vo.picture.pic_cover_small)}"/>
+						</div>
+						<p class="goods-name">{$vo.goods_name}</p>
+						<p class="goods-price"><span>原价:<em>￥{$vo.promotion_price}</em></span><span>团购价:<em>￥{$vo.group_price}</em></span></p>
+						<a href="{:__URL('APP_MAIN/goods/detail&goods_id='.$vo.goods_id)}">查看详情</a>
+					</div>
+				</div>
+			{/if}
+		{/foreach}	
+	</div>
+	{/if}
+{/if}
+<script>
+
+</script>

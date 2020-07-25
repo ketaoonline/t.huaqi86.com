@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="{$pc_path}/style_4.css"/>
+<div class="floor-four floor-item">
+    <div class="floor-four-title">
+        {php}
+            if(is_url($data['text']['left_title']['link'])){
+                $title_url = $data['text']['left_title']['link'];
+            }else{
+                $title_url = __URL($data['text']['left_title']['link']);
+            }
+        {/php}
+        <h2 class="floor-four-tile-left" data-block-type="text" data-block-name="left_title">
+            <span class="main-title" onclick="location.href='{$title_url}'">
+            {if condition="$data['text']['left_title']['value']"}{$data['text']['left_title']['value']}{else/}海鲜水产{/if}</span>
+            <i>|</i>
+            <span class="subtitle" onclick="location.href='{$title_url}'">{if condition="$data['text']['left_title']['value']"}{$data['text']['left_title']['value']}{else/}海鲜水产{/if}</span>
+        </h2>
+        <div class="floor-four-tile-right">
+            <p class="floor-four-title-link" data-block-type="product_category" data-block-name="top_category">
+                {if condition="$data['product_category']['top_category']"}
+                {foreach name="$data['product_category']['top_category']" item="vo"}
+                <a href="{:__URL('SHOP_MAIN/goods/lists?category_id='.$vo['category_id'])}">{$vo['category_name']}</a>
+                <span class="sign">/</span>
+                {/foreach}
+                {/if}
+            </p>
+            <p class="floor-four-title-more">
+                <a {notempty name="$data['url']['more']['link']"}href="{$data['url']['more']['link']}"{else/}href="{:__URL("SHOP_MAIN/goods/lists")}"{/notempty} data-block-type="url" data-block-name="more">查看更多</a>
+            </p>
+        </div>
+    </div>
+    <ul class="floor-four-content" data-block-type="product" data-block-name="middle">
+        {if condition="$data['product']['middle']"}
+        {foreach name="$data['product']['middle']" item="product"}
+        <li class="floor-four-item">
+            <a href="{:__URL('SHOP_MAIN/goods/detail?goods_id='.$product['goods_id'])}" class="floor-four-item-wrap" target="_blank">
+                <div class="floor-four-pic">
+                    {if condition="$product['pic_cover_small'] != '' "}
+                    <img src="{:__img($product['pic_cover_small'])}">
+                    {else/}
+                    <img src="WEB_IMG/discount_product_default.png">
+                    {/if}
+                </div>
+                <p class="floor-four-describe">{$product.goods_name}</p>
+                <p class="floor-four-price ns-text-color" >￥<span>{$product.promotion_price}</span></p>
+            </a>
+        </li>
+        {/foreach}
+        {else/}
+        {php}for($i=0;$i<8;$i++){ {/php}
+        <li class="floor-four-item no-data-item">
+            <a href="" class="floor-four-item-wrap">
+                <div class="floor-four-pic ns-bg-color-gray">
+                    <img src="" alt="">
+                </div>
+                <p class="floor-four-describe ns-bg-color-gray"></p>
+                <p class="floor-four-price ns-bg-color-gray"></p>
+            </a>
+        </li>
+        {php} }; {/php}
+        {/if}
+    </ul>
+
+</div>
+<input type="hidden" name="floor_name" value="{$name}">

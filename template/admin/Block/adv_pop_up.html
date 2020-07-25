@@ -1,0 +1,474 @@
+<script src="__STATIC__/js/ajax_file_upload.js" type="text/javascript"></script>
+<script src="__STATIC__/js/file_upload.js" type="text/javascript"></script>
+<style>
+.single-btn-upload{display: none;}
+.layui-form {
+    padding: 10px;
+    background: #fff;
+}
+.adv-item {
+    width: calc(100% - 140px);
+    padding: 20px;
+    border: 1px dashed #ddd; 
+    display: flex;
+    margin-bottom: 10px;
+    position: relative;
+}
+.adv-item .upload-btn-wrap {
+    width: 80px;
+    height: 80px;
+}
+
+.adv-item .upload-mode,.adv-item .img-mode {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border: 1px dashed #ddd;
+    cursor: pointer;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.adv-item .upload-mode:hover {
+    border-color: #0d73f9;
+}
+
+.adv-item .upload-mode.err {
+    border-color: #f00;
+}
+
+.adv-item .upload-mode .input-file {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+.adv-item .upload-mode i {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    color: #999;
+    display: block;
+    text-align: center;
+    margin-top: 26px;
+    margin-bottom: 2px;
+    color: #999;
+}
+.adv-item .upload-mode .text{
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+.adv-item .img-mode {
+    border: 1px solid #ddd;
+    line-height: 80px;
+}
+.adv-item .img-mode .cover {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.6);
+    z-index: 5;
+}
+.adv-item .img-mode .cover i{
+    flex: 1;
+    color: #fff;
+    text-align: center;
+    line-height: 80px;
+}
+.adv-item .img-mode img{
+    max-width: 80px;
+    max-height: 80px;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.adv-item .img-mode:hover .cover{
+    display: flex;
+}
+.add-adv-item {
+    width: calc(100% - 100px);
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border: 1px dashed #ddd;
+    color: #666;
+    cursor: pointer;
+}
+
+.add-adv-item:hover{
+    border-color: #0d73f9;
+}
+
+.add-adv-item i {
+    color: #999;
+    font-size: 14px;
+    margin-right: 5px;
+}
+.adv-item .adv-form{
+    width: calc(100% - 80px);
+    display: inline-block;
+}   
+.adv-item .adv-form .layui-form-item{
+    margin-bottom: 5px;
+}
+.adv-item .adv-form .layui-form-label {
+    width: 60px;
+    margin-bottom: 0;
+}
+.adv-item .adv-form .layui-input-block {
+    margin-left: 90px;
+    min-height: 30px;
+}
+.adv-item .adv-form .layui-form-select,.adv-item .adv-form .layui-input{
+    margin-bottom: 0;
+}
+
+.adv-item .del-adv-item {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 12px;
+}
+</style>
+
+<div class="layui-form adv-pop-up">
+    <div class="layui-form-item">
+        <label class="layui-form-label">广告管理</label>
+        <div class="layui-input-block">
+            {notempty name="data"}
+                {foreach name="data" item="vo" key="k"}
+                <div class="adv-item">
+                    <div class="upload-btn-wrap">
+                        <div class="upload-mode hide">
+                            <input class="input-file" name="file_upload" data-id="" id="upload_id0" type="file" onchange="imgUpload(this);">
+                            <i class="fa fa-cloud-upload"></i>
+                            <p class="text">上传图片</p>
+                        </div>
+                        <div class="img-mode layer-photos-demo">
+                            <div class="cover">
+                                <i class="fa fa-eye" title="查看图片"></i>
+                                <i class="fa fa-trash-o" title="删除图片"></i>
+                            </div>
+                            <img src="{:__IMG($vo.img_src)}" alt="" data-url="{$vo.img_src}">
+                        </div>
+                    </div>
+                    <div class="adv-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图片链接</label>
+                            <div class="layui-input-block">
+                                {notempty name="$vo['link']"}
+                                    {assign name="is_inside_module" value="false"}
+                                    <select name="adv_link" lay-filter="adv_link">
+                                        <option value="">请选择</option>
+                                        {foreach name="$diy_view_link" item="link"}
+                                            {if $vo['link'] eq $link['nav_url']}
+                                            <option value="{$link['nav_url']}" {if $vo['link'] eq $link['nav_url']}selected{/if}>{$link['nav_title']}</option>
+                                                {assign name="is_inside_module" value="true"}
+                                            {else/}
+                                            <option value="{$link['nav_url']}">{$link['nav_title']}</option>
+                                            {/if}
+                                        {/foreach}
+                                        {if $is_inside_module eq 'false'}
+                                        <option value="{$vo.link}" data-diy="diy" selected>自定义链接</option>
+                                        {else/}
+                                        <option value="" data-diy="diy">自定义链接</option>
+                                        {/if}
+                                    </select>
+                                {else/}
+                                <select name="adv_link" lay-filter="adv_link">
+                                    <option value="">请选择</option>
+                                    {foreach name="$diy_view_link" item="link"}
+                                    <option value="{$link['nav_url']}">{$link['nav_title']}</option>
+                                    {/foreach}
+                                    <option value="" data-diy="diy">自定义链接</option>
+                                </select>
+                                {/notempty}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">主标题</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="adv_title" placeholder="请输入主标题内容" class="layui-input" value="{$vo.title}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">副标题</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="adv_sub_title" placeholder="请输入副标题内容" class="layui-input" value="{$vo.sub_title}">
+                            </div>
+                        </div>
+                    </div>
+                    {if $k > 0}<a href="javascript:;" class="del-adv-item">删除广告</a>{/if}
+                </div>
+                {/foreach}
+            {else/}
+            <div class="adv-item">
+                <div class="upload-btn-wrap">
+                    <div class="upload-mode">
+                        <input class="input-file" name="file_upload" data-id="" id="upload_id0" type="file" onchange="imgUpload(this);">
+                        <i class="fa fa-cloud-upload"></i>
+                        <p class="text">上传图片</p>
+                    </div>
+                    <div class="img-mode hide layer-photos-demo">
+                        <div class="cover">
+                            <i class="fa fa-eye" title="查看图片"></i>
+                            <i class="fa fa-trash-o" title="删除图片"></i>
+                        </div>
+                        <img src="" alt="" data-url="">
+                    </div>
+                </div>
+                <div class="adv-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">图片链接</label>
+                        <div class="layui-input-block">
+                            <select name="adv_link" lay-filter="adv_link">
+                                <option value="">请选择</option>
+                                {foreach name="$diy_view_link" item="link"}
+                                <option value="{$link['nav_url']}">{$link['nav_title']}</option>
+                                {/foreach}
+                                <option value="0" data-diy="diy">自定义链接</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">主标题</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="adv_title" placeholder="请输入主标题内容" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">副标题</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="adv_sub_title" placeholder="请输入副标题内容" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/notempty}
+            {eq name="data_type" value="multi_graph"}<div class="add-adv-item"><i class="fa fa-plus"></i>添加广告图</div>{/eq}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="adv_save">确定</button>
+        </div>
+    </div>
+    
+    {notempty name="$data && $data['link']"}
+    <input id="hidden_adv_link" type="hidden" value="{$data['link']}">
+    {/notempty}
+    
+</div>
+
+<script type="text/html" id="advItem">
+    <div class="adv-item">
+        <div class="upload-btn-wrap">
+            <div class="upload-mode">
+                <input class="input-file" name="file_upload" data-id="" id="upload_id{{d.value}}" type="file" onchange="imgUpload(this);">
+                <i class="fa fa-cloud-upload"></i>
+                <p class="text">上传图片</p>
+            </div>
+            <div class="img-mode hide">
+                <div class="cover">
+                    <i class="fa fa-eye" title="查看图片"></i>
+                    <i class="fa fa-trash-o" title="删除图片"></i>
+                </div>
+                <img src="" alt="" data-url="">
+            </div>
+        </div>
+        <div class="adv-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">图片链接</label>
+                <div class="layui-input-block">
+                    <select name="adv_link" lay-filter="adv_link">
+                        <option value="">请选择</option>
+                        {foreach name="$diy_view_link" item="link"}
+                        <option value="{$link['nav_url']}">{$link['nav_title']}</option>
+                        {/foreach}
+                        <option value="0" data-diy="diy">自定义链接</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">主标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="adv_title" placeholder="请输入主标题内容" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">副标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="adv_sub_title" placeholder="请输入副标题内容" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="del-adv-item">删除广告</a>
+    </div>
+</script>
+
+<script>
+  //图片上传
+    function imgUpload(event) {
+    	var fileid = $(event).attr("id");
+        var parentsEl = $(event).parents('.upload-btn-wrap');
+        var data = { 'file_path' : "config" };
+        uploadFile({
+            url: 'ADMIN_MAIN/config/uploadimage',
+            fileId: fileid,
+            data : data,
+            callBack: function (res) {
+                if(res.code){
+                    parentsEl.find('.upload-mode').addClass('hide');
+                    parentsEl.find('.img-mode').removeClass('hide');
+                    parentsEl.find('.img-mode img').attr({
+                        'src' : __IMG(res.data.path),
+                        'data-url' : res.data.path
+                    })
+    				layer(res.message);
+    			}else{
+    				layer(res.message);
+    			}
+    		}
+    	});
+    }
+
+    // 添加广告
+    $('.add-adv-item').click(function(event) {
+        var _this = $(this);
+        laytpl($('#advItem').html()).render({ value: (new Date().getTime())}, function(string){
+            _this.before(string);
+            form.render();
+        });
+    });
+
+    // 删除广告
+    $('body').on('click', '.del-adv-item', function(event) {
+        $(this).parents('.adv-item').remove();
+    });
+
+    // 查看图片
+    $('body').on('click', '.img-mode i.fa-eye', function(event) {
+        var src = $(this).parents('.img-mode').find('img').attr('src');
+        layer.photos({
+            photos:{
+                "title": "", //相册标题
+                "id": 0, //相册id
+                "start": 0, //初始显示的图片序号，默认0
+                "data": [   //相册包含的图片，数组格式
+                    {
+                        "alt": "",
+                        "pid": 0, //图片id
+                        "src": src, //原图地址
+                        "thumb": "" //缩略图地址
+                    }
+                ]
+            },
+            anim: 5 
+        });
+    })
+
+    // 删除图片
+    $('body').on('click', '.img-mode i.fa-trash-o', function(event) {
+        var parentsEl = $(this).parents('.upload-btn-wrap');
+            parentsEl.find('.upload-mode').removeClass('hide');
+            parentsEl.find('.img-mode').addClass('hide');
+            parentsEl.find('.img-mode img').attr({
+                'src' : '',
+                'data-url' : ''
+            })
+    })
+
+    var laytpl,form,layer;
+    layui.use(['form','layer', 'laytpl'], function() {
+        form = layui.form;
+        layer = layui.layer;
+        laytpl = layui.laytpl;
+
+        //设置选中链接地址
+        if ($("#hidden_adv_link").length>0 && $("#hidden_adv_link").val() != "") {
+            if ($(".adv-pop-up select[name='adv_link'] option[value='" + $("#hidden_adv_link").val() + "']").text() != "") {
+                $(".adv-pop-up select[name='adv_link'] option[value='" + $("#hidden_adv_link").val() + "']").attr("selected", "selected");
+            } else {
+                $(".adv-pop-up select[name='adv_link'] option[data-diy]").attr("selected", "selected");
+            }
+        }
+
+        form.render();
+
+        form.on('select(adv_link)', function(data){
+            console.log(data.elem)
+            if($(data.elem).find("option[data-diy]:selected").text()){
+                var value = $(data.elem).find("option[data-diy]:selected").val();
+                layer.prompt({
+                    value : value
+                },function(value, index, elem){
+                    if(/^(http|https)\S+$/.test(value)){
+                        $(".adv-pop-up select[name='adv_link'] option[data-diy]").attr("value",value);
+                        form.render("select");
+                        layer.close(index);
+                    }else{
+                        layer.msg("链接地址格式错误");
+                    }
+                });
+            }
+        });
+
+        //监听提交
+        form.on('submit(adv_save)', function(data){
+            var data_type = '{$data_type}';
+            if (verify()) {
+                if (data_type == 'multi_graph') {
+                    var adv_data = [];
+                    $('.adv-item').each(function(index, el) {
+                        adv_data.push({
+                            img_src : $(el).find('.img-mode img').attr('data-url'),
+                            link : $(el).find('[name="adv_link"]').val(),
+                            title : $(el).find('[name="adv_title"]').val(),
+                            sub_title : $(el).find('[name="adv_sub_title"]').val()
+                        })
+                    });
+                }else{
+                    var adv_data = {
+                        img_src : $('.adv-item .img-mode img').attr('data-url'),
+                        link : $('.adv-item [name="adv_link"]').val(),
+                        title : $('.adv-item [name="adv_title"]').val(),
+                        sub_title : $('.adv-item [name="adv_sub_title"]').val(),
+                    }
+                }
+                window.parent.block.setData(adv_data);
+                window.parent.layer.close(window.parent.block.layer_open_index);                
+            }
+        });
+    });
+
+    function verify(){
+        var res = true;
+        $('.adv-item').each(function(index, el) {
+            if ($(el).find('.img-mode img').attr('data-url') == '') {
+                layer.msg('请上传广告图');
+                $(el).find('.upload-mode').addClass('err');
+                res = false;
+                return;
+            }
+        })
+        if (res) $('.upload-mode').removeClass('err');
+        return res;
+    }
+
+    /**
+     * 单图回调事件
+     */
+    function singleImageUploadSuccess(res,name){
+        $(".image_url").attr("src",nc.img(res.data.path));
+        $("input[name='img_src']").val(res.data.path);
+    }
+</script>

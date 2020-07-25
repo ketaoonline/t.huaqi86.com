@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+.inline {display: inline-block;margin-bottom: 0;vertical-align: middle;}
+.inline + .inline {margin-left: 10px;}
+.level-container {background: #f9f9f9;border:1px solid #eee;width: 100%;border-radius: 5px;display: flex;margin-bottom: 10px;}
+.level-container .left-box {width: 210px;padding: 15px;border-right:1px solid #eee;}
+.level-container .right-box {flex: 1;padding: 15px;}
+.level-container .right-box .give_type {display:inline-block;height: 30px;position: relative;top: -2px; } 
+.level-container .right-box [data-type="coupon"] {padding:2px 0 0 10px;}
+.level-container .right-box [data-type="coupon"] .selectric-wrapper {top: 2px;}
+.level-container .right-box .add-new-coupon {margin-left: 10px;font-size: 12px;}
+.level-container .add-new-coupon .space {margin: 0 5px;color: #999}
+.level-container .give-content-list {margin-bottom: 15px;}
+.level-container .give-content-list .item {margin-bottom: 8px;}
+.level-container .item .fa-trash {color: #999;margin-left: 5px;cursor: pointer;}
+.level-container .box-title {font-weight: 700;font-size: 12px;line-height: 20px;margin-bottom: 15px;}
+.level-container .box-title .del {float: right;font-weight: normal; } 
+.level-container .condition {margin-left: 10px!important;}
+.error {font-size: 12px;padding-top: 5px}
